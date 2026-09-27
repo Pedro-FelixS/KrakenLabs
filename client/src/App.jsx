@@ -24,6 +24,9 @@ function App() {
           Nome: {' '}
         <input type="text" placeholder="Nome: " style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}></input>
         </label>
+        <label>
+          Senha: {}
+        </label>
       </div>
     </div>
   );
