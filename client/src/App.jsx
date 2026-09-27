@@ -13,9 +13,15 @@ function App() {
   }, []);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Projeto de Laboratório</h1>
-      <p>Status do Servidor: <strong>{mensagem}</strong></p>
+    <div>
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <h1>KrakenLabs</h1>
+        <p>Status do Servidor: <strong>{mensagem}</strong></p>
+      </div>
+      <div style={{ textAlign: 'center', marginTop: '60px' }}>
+        <h2 id="usuários">Login de usuários:</h2>
+        <input>Nome:</input>
+      </div>
     </div>
   );
 }
