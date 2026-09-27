@@ -20,7 +20,10 @@ function App() {
       </div>
       <div style={{ textAlign: 'center', marginTop: '60px' }}>
         <h2 id="usuários">Login de usuários:</h2>
-        <input>Nome:</input>
+        <label>
+          Nome: {' '}
+        <input type="text" placeholder="Nome: "></input>
+        </label>
       </div>
     </div>
   );
