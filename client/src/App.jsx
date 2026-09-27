@@ -22,7 +22,7 @@ function App() {
         <h2 id="usuários">Login de usuários:</h2>
         <label>
           Nome: {' '}
-        <input type="text" placeholder="Nome: "></input>
+        <input type="text" placeholder="Nome: " style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}></input>
         </label>
       </div>
     </div>
