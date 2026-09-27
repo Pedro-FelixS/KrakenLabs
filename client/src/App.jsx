@@ -25,7 +25,9 @@ function App() {
         <input type="text" placeholder="Nome: " style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}></input>
         </label>
         <label>
-          Senha: {}
+          Senha: {' '}
+          sua senha deve ter pelo menos oito caracteres!
+          <input type="password" placeholder="Senha:" style={{ padding: '11px', borderRadius: '4px', border: '1px solid #ccc' }}></input>
         </label>
       </div>
     </div>
