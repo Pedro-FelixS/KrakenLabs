@@ -23,23 +23,23 @@ function App() {
         <h2>Login do usuário</h2>
         <label className='cadastro'>
           <span className='grupo'>Nome completo:</span>
-          <input type='text' placeholder='Seu nome completo'></input>
+          <input type='text' placeholder='Seu nome completo' />
         </label>
         <label className='cadastro'>
           <span className='grupo'>CPF:</span>
-          <input type='text' placeholder='XXX.XXX.XXX-XX'></input>
+          <input type='text' placeholder='XXX.XXX.XXX-XX' />
         </label>
         <label className='cadastro'>
           <span className='grupo'>Data de aniversário:</span>
-          <input type='date' placeholder='digite sua data de aniversário'></input>
+          <input type='date' placeholder='digite sua data de aniversário' />
         </label>
         <label className='cadastro'>
           <span className='grupo'>Número de telefone:</span>
-          <input type='tel' placeholder='digite seu número de telefone'></input>
+          <input type='tel' placeholder='digite seu número de telefone' />
         </label>
         <label className='cadastro'>
           <span className='grupo'>E-mail:</span>
-          <input type='email' placeholder='digite seu e-mail'></input>
+          <input type='email' placeholder='digite seu e-mail' />
         </label>
 
       </div>
