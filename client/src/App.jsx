@@ -18,18 +18,29 @@ function App() {
         <h1>KrakenLabs</h1>
         <p>Status do Servidor: <strong>{mensagem}</strong></p>
       </div>
-      <div style={{ textAlign: 'center', marginTop: '60px' }}>
-        <h2 id="usuários">Login de usuários:</h2>
-        <label style={{ display: 'block', marginBottom: '20px' }}>
-        <span style={{ display: 'block', marginBottom: '5px' }}>Nome:</span>
-        <input type="text" placeholder="Nome: " style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
+      <div className='usuario'>
+        <h2>Login do usuário</h2>
+        <label className='cadastro'>
+          <span className='grupo'>Nome completo:</span>
+          <input type='text' placeholder='Seu nome completo'></input>
         </label>
-        <label style = {{display: 'block'}}>
-        <span style={{ display: 'block', marginBottom: '5px' }}>
-            Senha(deve ter pelo menos oito caracteres!)
-        </span>
-        <input type="password" placeholder="Senha:" style={{ padding: '11px', borderRadius: '4px', border: '1px solid #ccc' }} />
+        <label className='cadastro'>
+          <span className='grupo'>CPF:</span>
+          <input type='text' placeholder='XXX.XXX.XXX-XX'></input>
         </label>
+        <label className='cadastro'>
+          <span className='grupo'>Data de aniversário:</span>
+          <input type='date' placeholder='digite sua data de aniversário'></input>
+        </label>
+        <label className='cadastro'>
+          <span className='grupo'>Número de telefone:</span>
+          <input type='tel' placeholder='digite seu número de telefone'></input>
+        </label>
+        <label className='cadastro'>
+          <span className='grupo'>E-mail:</span>
+          <input type='email' placeholder='digite seu e-mail'></input>
+        </label>
+
       </div>
     </div>
   );
