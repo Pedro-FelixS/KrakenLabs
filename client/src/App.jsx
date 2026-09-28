@@ -20,14 +20,15 @@ function App() {
       </div>
       <div style={{ textAlign: 'center', marginTop: '60px' }}>
         <h2 id="usuários">Login de usuários:</h2>
-        <label>
-          Nome: {' '}
-        <input type="text" placeholder="Nome: " style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}></input>
+        <label style={{ display: 'block', marginBottom: '20px' }}>
+        <span style={{ display: 'block', marginBottom: '5px' }}>Nome:</span>
+        <input type="text" placeholder="Nome: " style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
         </label>
-        <label>
-          Senha: {' '}
-          sua senha deve ter pelo menos oito caracteres!
-          <input type="password" placeholder="Senha:" style={{ padding: '11px', borderRadius: '4px', border: '1px solid #ccc' }}></input>
+        <label style = {{display: 'block'}}>
+        <span style={{ display: 'block', marginBottom: '5px' }}>
+            Senha(deve ter pelo menos oito caracteres!)
+        </span>
+        <input type="password" placeholder="Senha:" style={{ padding: '11px', borderRadius: '4px', border: '1px solid #ccc' }} />
         </label>
       </div>
     </div>
