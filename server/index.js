@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const bcrypt = require('bcrypt'); // Importa a biblioteca de hash
+const bcrypt = require('bcrypt');
 const { conectarBD, sql } = require('./db');
 
 const app = express();
@@ -8,11 +8,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Rota de Cadastro com Senha Segura
+
+app.get('/api/dados', (req, res) => {
+  res.json({ mensagem: 'Servidor Express rodando com sucesso!' });
+});
+
 app.post('/api/usuarios', async (req, res) => {
   const { nome, senha, cpf, dataNascimento, telefone, email } = req.body;
 
-  // 1. Validação simples de campos e tamanho da senha
+
   if (!nome || !senha || !email || !cpf) {
     return res.status(400).json({ mensagem: 'Preencha todos os campos obrigatórios.' });
   }
@@ -24,29 +28,35 @@ app.post('/api/usuarios', async (req, res) => {
   try {
     const pool = await conectarBD();
 
-    // 2. Criptografa a senha antes de salvar (Custo de hash: 10)
+   
     const senhaHash = await bcrypt.hash(senha, 10);
 
-    // 3. Insere no SQL Server salvando o HASH e não a senha limpa
     await pool.request()
-      .input('nome', sql.VarChar, nome)
-      .input('senha', sql.VarChar, senhaHash) // Salva no campo Senha do BD
       .input('cpf', sql.VarChar, cpf)
-      .input('dataNascimento', sql.Date, dataNascimento || null)
-      .input('telefone', sql.VarChar, telefone || null)
+      .input('nome', sql.VarChar, nome)
+      .input('dataniver', sql.Date, dataNascimento)
+      .input('cel', sql.VarChar, telefone)
       .input('email', sql.VarChar, email)
+      .input('senha', sql.VarChar, senhaHash)
       .query(`
-        INSERT INTO Usuarios (Nome, Senha, CPF, DataNascimento, Telefone, Email)
-        VALUES (@nome, @senha, @cpf, @dataNascimento, @telefone, @email)
+        INSERT INTO usuarios (cpf, nome, dataniver, cel, email, senha)
+        VALUES (@cpf, @nome, @dataniver, @cel, @email, @senha)
       `);
 
     return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!' });
 
   } catch (erro) {
-    console.error('Erro ao cadastrar usuário:', erro);
+    console.error('Erro ao cadastrar:', erro);
+
+    
+    if (erro.number === 2627 || erro.number === 2601) {
+      return res.status(400).json({ mensagem: 'Este CPF ou E-mail já está cadastrado.' });
+    }
+
     return res.status(500).json({ mensagem: 'Erro ao salvar cadastro no banco de dados.' });
   }
 });
 
+
 const PORTA = process.env.PORT || 5000;
-app.listen(PORTA, () => console.log(`Servidor rodando na porta ${PORTA}`));
+app.listen(PORTA, () => console.log(`🚀 Servidor rodando na porta ${PORTA}`));
