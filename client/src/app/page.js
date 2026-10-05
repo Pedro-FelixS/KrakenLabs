@@ -2,15 +2,64 @@
 
 import { useEffect, useState } from 'react';
 
+const ESTADO_INICIAL = {
+  nome: '',
+  senha: '',
+  cpf: '',
+  dataNascimento: '',
+  telefone: '',
+  email: ''
+};
+
 export default function Home() {
   const [mensagem, setMensagem] = useState('Carregando...');
+  const [formData, setFormData] = useState(ESTADO_INICIAL);
+  const [statusEnvio, setStatusEnvio] = useState(null);
+  const [carregando, setCarregando] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/dados')
       .then((res) => res.json())
       .then((data) => setMensagem(data.mensagem))
-      .catch((err) => console.error('Erro ao buscar dados:', err));
+      .catch(() => setMensagem('Erro de conexão'));
   }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (formData.senha.length < 8) {
+      setStatusEnvio({ texto: 'A senha precisa ter pelo menos 8 caracteres.', tipo: 'erro' });
+      return;
+    }
+
+    setCarregando(true);
+    setStatusEnvio(null);
+
+    try {
+      const res = await fetch('http://localhost:5000/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.mensagem);
+
+      setStatusEnvio({ texto: data.mensagem, tipo: 'sucesso' });
+      setFormData(ESTADO_INICIAL);
+
+    } catch (err) {
+      setStatusEnvio({ texto: err.message || 'Falha ao cadastrar.', tipo: 'erro' });
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   return (
     <div>
@@ -21,37 +70,89 @@ export default function Home() {
       </div>
 
       <div className="usuario">
-        <h2>Login / Cadastro de usuário</h2>
+        <h2>Cadastro de Usuário</h2>
 
-        <label className="cadastro">
-          <span className="grupo">Nome completo:</span>
-          <input type="text" placeholder="Seu nome completo" />
-        </label>
+        {statusEnvio && (
+          <p style={{ color: statusEnvio.tipo === 'sucesso' ? 'green' : 'red', fontWeight: 'bold' }}>
+            {statusEnvio.texto}
+          </p>
+        )}
 
-        <label className="cadastro">
-          <span className="grupo">Senha (Deve ter no mínimo oito caracteres):</span>
-          <input type="password" placeholder="Digite sua senha" />
-        </label>
+        <form onSubmit={handleSubmit}>
+          <label className="cadastro">
+            <span className="grupo">Nome completo:</span>
+            <input
+              type="text"
+              name="nome"
+              value={formData.nome}
+              onChange={handleChange}
+              placeholder="Seu nome completo"
+              required
+            />
+          </label>
 
-        <label className="cadastro">
-          <span className="grupo">CPF:</span>
-          <input type="text" placeholder="XXX.XXX.XXX-XX" />
-        </label>
+          <label className="cadastro">
+            <span className="grupo">Senha (Mínimo de 8 caracteres):</span>
+            <input
+              type="password"
+              name="senha"
+              value={formData.senha}
+              onChange={handleChange}
+              placeholder="Digite sua senha"
+              minLength={8}
+              required
+            />
+          </label>
 
-        <label className="cadastro">
-          <span className="grupo">Data de aniversário:</span>
-          <input type="date" />
-        </label>
+          <label className="cadastro">
+            <span className="grupo">CPF:</span>
+            <input
+              type="text"
+              name="cpf"
+              value={formData.cpf}
+              onChange={handleChange}
+              placeholder="XXX.XXX.XXX-XX"
+              required
+            />
+          </label>
 
-        <label className="cadastro">
-          <span className="grupo">Número de telefone:</span>
-          <input type="tel" placeholder="digite seu número de telefone" />
-        </label>
+          <label className="cadastro">
+            <span className="grupo">Data de aniversário:</span>
+            <input
+              type="date"
+              name="dataNascimento"
+              value={formData.dataNascimento}
+              onChange={handleChange}
+            />
+          </label>
 
-        <label className="cadastro">
-          <span className="grupo">E-mail:</span>
-          <input type="email" placeholder="digite seu e-mail" />
-        </label>
+          <label className="cadastro">
+            <span className="grupo">Número de telefone:</span>
+            <input
+              type="tel"
+              name="telefone"
+              value={formData.telefone}
+              onChange={handleChange}
+              placeholder="Digite seu telefone"
+            />
+          </label>
+
+          <label className="cadastro">
+            <span className="grupo">E-mail:</span>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Digite seu e-mail"
+              required
+            />
+          </label>
+
+          <button type="submit" disabled={carregando} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
+            {carregando ? 'Cadastrando...' : 'Cadastrar'}
+          </button>
+        </form>
       </div>
     </div>
   );
