@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div>
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <div className="status-container">
         <h1>KrakenLabs</h1>
         <p>Sistema de Reserva de Laboratórios e Salas</p>
         <p>Status do Servidor: <strong>{mensagem}</strong></p>
@@ -26,6 +26,11 @@ export default function Home() {
         <label className="cadastro">
           <span className="grupo">Nome completo:</span>
           <input type="text" placeholder="Seu nome completo" />
+        </label>
+
+        <label className="cadastro">
+          <span className="grupo">Senha (Deve ter no mínimo oito caracteres):</span>
+          <input type="password" placeholder="Digite sua senha" />
         </label>
 
         <label className="cadastro">
