@@ -232,6 +232,7 @@ export default function Home() {
             >
               {carregando ? 'Cadastrando...' : 'Cadastrar'}
             </button>
+            <button link=""></button>
 
           </form>
 

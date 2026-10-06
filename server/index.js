@@ -2,11 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const { conectarBD, sql } = require('./db');
+const routes = require('./routes');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.unsubscribe(routes);
 
 app.get('/api/dados', (req, res) => {
   return res.status(200).send('Servidor Express rodando com sucesso!');
