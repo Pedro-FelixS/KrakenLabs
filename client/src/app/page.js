@@ -12,28 +12,40 @@ const ESTADO_INICIAL = {
 };
 
 export default function Home() {
+
   const [mensagem, setMensagem] = useState('Carregando...');
   const [formData, setFormData] = useState(ESTADO_INICIAL);
   const [statusEnvio, setStatusEnvio] = useState(null);
   const [carregando, setCarregando] = useState(false);
 
   useEffect(() => {
+
     fetch('http://localhost:5000/api/dados')
       .then((res) => res.json())
       .then((data) => setMensagem(data.mensagem))
       .catch(() => setMensagem('Erro de conexão'));
+
   }, []);
 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
+
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
-    
+
     if (formData.senha.length < 8) {
-      setStatusEnvio({ texto: 'A senha precisa ter pelo menos 8 caracteres.', tipo: 'erro' });
+
+      setStatusEnvio({
+        texto: 'A senha precisa ter pelo menos 8 caracteres.',
+        tipo: 'erro'
+      });
+
       return;
     }
 
@@ -41,6 +53,7 @@ export default function Home() {
     setStatusEnvio(null);
 
     try {
+
       const res = await fetch('http://localhost:5000/api/usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -51,109 +64,182 @@ export default function Home() {
 
       if (!res.ok) throw new Error(data.mensagem);
 
-      setStatusEnvio({ texto: data.mensagem, tipo: 'sucesso' });
+      setStatusEnvio({
+        texto: data.mensagem,
+        tipo: 'sucesso'
+      });
+
       setFormData(ESTADO_INICIAL);
 
     } catch (err) {
-      setStatusEnvio({ texto: err.message || 'Falha ao cadastrar.', tipo: 'erro' });
+
+      setStatusEnvio({
+        texto: err.message || 'Falha ao cadastrar.',
+        tipo: 'erro'
+      });
+
     } finally {
+
       setCarregando(false);
+
     }
   };
 
   return (
-    <div>
-      <div className="status-container">
-        <h1>KrakenLabs</h1>
-        <p>Sistema de Reserva de Laboratórios e Salas</p>
-        <p>Status do Servidor: <strong>{mensagem}</strong></p>
-      </div>
 
-      <div className="usuario">
-        <h2>Cadastro de Usuário</h2>
+    <div className="page">
 
-        {statusEnvio && (
-          <p style={{ color: statusEnvio.tipo === 'sucesso' ? 'green' : 'red', fontWeight: 'bold' }}>
-            {statusEnvio.texto}
+      <div className="main">
+
+        <div className="status-container">
+
+          <h1>KrakenLabs</h1>
+
+          <p>Sistema de Reserva de Laboratórios e Salas</p>
+
+          <p>
+            Status do Servidor: <strong>{mensagem}</strong>
           </p>
-        )}
 
-        <form onSubmit={handleSubmit}>
-          <label className="cadastro">
-            <span className="grupo">Nome completo:</span>
-            <input
-              type="text"
-              name="nome"
-              value={formData.nome}
-              onChange={handleChange}
-              placeholder="Seu nome completo"
-              required
-            />
-          </label>
+        </div>
 
-          <label className="cadastro">
-            <span className="grupo">Senha (Mínimo de 8 caracteres):</span>
-            <input
-              type="password"
-              name="senha"
-              value={formData.senha}
-              onChange={handleChange}
-              placeholder="Digite sua senha"
-              minLength={8}
-              required
-            />
-          </label>
+        <div className="usuario">
 
-          <label className="cadastro">
-            <span className="grupo">CPF:</span>
-            <input
-              type="text"
-              name="cpf"
-              value={formData.cpf}
-              onChange={handleChange}
-              placeholder="XXX.XXX.XXX-XX"
-              required
-            />
-          </label>
+          <h2>Cadastro de Usuário</h2>
 
-          <label className="cadastro">
-            <span className="grupo">Data de aniversário:</span>
-            <input
-              type="date"
-              name="dataNascimento"
-              value={formData.dataNascimento}
-              onChange={handleChange}
-            />
-          </label>
+          {statusEnvio && (
 
-          <label className="cadastro">
-            <span className="grupo">Número de telefone:</span>
-            <input
-              type="tel"
-              name="telefone"
-              value={formData.telefone}
-              onChange={handleChange}
-              placeholder="Digite seu telefone"
-            />
-          </label>
+            <p
+              style={{
+                color: statusEnvio.tipo === 'sucesso' ? 'green' : 'red',
+                fontWeight: 'bold'
+              }}
+            >
+              {statusEnvio.texto}
+            </p>
 
-          <label className="cadastro">
-            <span className="grupo">E-mail:</span>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Digite seu e-mail"
-              required
-            />
-          </label>
+          )}
 
-          <button type="submit" disabled={carregando} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
-            {carregando ? 'Cadastrando...' : 'Cadastrar'}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit}>
+
+            <label className="cadastro">
+
+              <span className="grupo">
+                Nome completo:
+              </span>
+
+              <input
+                type="text"
+                name="nome"
+                value={formData.nome}
+                onChange={handleChange}
+                placeholder="Seu nome completo"
+                required
+              />
+
+            </label>
+
+            <label className="cadastro">
+
+              <span className="grupo">
+                Senha (Mínimo de 8 caracteres):
+              </span>
+
+              <input
+                type="password"
+                name="senha"
+                value={formData.senha}
+                onChange={handleChange}
+                placeholder="Digite sua senha"
+                minLength={8}
+                required
+              />
+
+            </label>
+
+            <label className="cadastro">
+
+              <span className="grupo">
+                CPF:
+              </span>
+
+              <input
+                type="text"
+                name="cpf"
+                value={formData.cpf}
+                onChange={handleChange}
+                placeholder="XXX.XXX.XXX-XX"
+                required
+              />
+
+            </label>
+
+            <label className="cadastro">
+
+              <span className="grupo">
+                Data de aniversário:
+              </span>
+
+              <input
+                type="date"
+                name="dataNascimento"
+                value={formData.dataNascimento}
+                onChange={handleChange}
+              />
+
+            </label>
+
+            <label className="cadastro">
+
+              <span className="grupo">
+                Número de telefone:
+              </span>
+
+              <input
+                type="tel"
+                name="telefone"
+                value={formData.telefone}
+                onChange={handleChange}
+                placeholder="Digite seu telefone"
+              />
+
+            </label>
+
+            <label className="cadastro">
+
+              <span className="grupo">
+                E-mail:
+              </span>
+
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Digite seu e-mail"
+                required
+              />
+
+            </label>
+
+            <button
+              type="submit"
+              disabled={carregando}
+              style={{
+                marginTop: '1rem',
+                padding: '0.5rem 1rem'
+              }}
+            >
+              {carregando ? 'Cadastrando...' : 'Cadastrar'}
+            </button>
+
+          </form>
+
+        </div>
+
       </div>
+
     </div>
+
   );
 }

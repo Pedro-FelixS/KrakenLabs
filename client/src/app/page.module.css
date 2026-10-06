@@ -1,21 +1,24 @@
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
 
-  --text-primary: #000;
-  --text-secondary: #666;
+  background: linear-gradient(
+    to bottom,
+    #020b12,
+    #041824,
+    #0a2a3a,
+    #10384d,
+    #0b2230
+  );
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
+  min-height: 100vh;
 
   display: flex;
   flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
 }
 
 .main {
@@ -26,7 +29,6 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  background-color: var(--foreground);
   padding: 120px 60px;
 }
 
@@ -45,7 +47,7 @@
   line-height: 48px;
   letter-spacing: -2.4px;
   text-wrap: balance;
-  color: var(--text-primary);
+  color: white;
 }
 
 .intro p {
@@ -53,12 +55,12 @@
   font-size: 18px;
   line-height: 32px;
   text-wrap: balance;
-  color: var(--text-secondary);
+  color: white;
 }
 
 .intro a {
   font-weight: 500;
-  color: var(--text-primary);
+  color: white;
 }
 
 .ctas {
@@ -85,24 +87,25 @@
 }
 
 a.primary {
-  background: var(--text-primary);
-  color: var(--background);
+  background: white;
+  color: #020b12;
   gap: 8px;
 }
 
 a.secondary {
-  border-color: var(--button-secondary-border);
+  border-color: white;
+  color: white;
 }
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
-    background: var(--button-primary-hover);
+    background: #ccd0cf;
     border-color: transparent;
   }
 
   a.secondary:hover {
-    background: var(--button-secondary-hover);
+    background: #253745;
     border-color: transparent;
   }
 }
@@ -127,24 +130,12 @@ a.secondary {
   .logo {
     filter: invert();
   }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
-  }
 }
 
 .code {
-  font-family: var(--font-geist-mono);
+  font-family: monospace;
   font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
+  background: rgba(255, 255, 255, 0.08);
   padding: 0.1em 0.4em;
   border-radius: 6px;
 }
