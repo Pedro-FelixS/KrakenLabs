@@ -1,26 +1,30 @@
 const sql = require('mssql');
-require('dotenv').config();
+require('dotenv').config(); 
 
-const dbConfig = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  server: process.env.DB_SERVER,
-  database: process.env.DB_DATABASE,
+
+const config = {
+  user: process.env.DB_USER,           
+  password: process.env.DB_PASSWORD,  
+  server: process.env.DB_SERVER || 'regulus.cotuca.unicamp.br',
+  database: process.env.DB_DATABASE || 'KrakenLabsDB',
+  port: 1433,
   options: {
-    encrypt: false,
-    trustServerCertificate: true,
-  },
+    encrypt: false,                     
+    trustServerCertificate: true,       
+    connectTimeout: 30000,              
+    requestTimeout: 30000
+  }
 };
 
-// Gerencia o pool de conexões do SQL Server
-const conectarBD = async () => {
+async function conectarBD() {
   try {
-    const pool = await sql.connect(dbConfig);
+    const pool = await sql.connect(config);
+    console.log('Conectado ao SQL Server com sucesso!');
     return pool;
   } catch (erro) {
     console.error('Falha na conexão com o SQL Server:', erro.message);
     throw erro;
   }
-};
+}
 
 module.exports = { conectarBD, sql };
