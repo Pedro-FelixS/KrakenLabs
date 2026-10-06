@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const { conectarBD, sql } = require('./db');
+const { conectarBancoDeDados, sql } = require('./db');
 const routes = require('./routes');
 
 const app = express();
@@ -26,7 +26,7 @@ app.post('/api/usuarios', async (req, res) => {
   }
 
   try {
-    const pool = await conectarBD();
+    const pool = await conectarBancoDeDados();
 
     const senhaHash = await bcrypt.hash(senha, 10);
 
