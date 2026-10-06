@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.unsubscribe(routes);
+app.use(routes);
 
 app.get('/api/dados', (req, res) => {
   return res.status(200).send('Servidor Express rodando com sucesso!');

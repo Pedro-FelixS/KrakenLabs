@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const ESTADO_INICIAL = {
   nome: '',
@@ -232,10 +233,11 @@ export default function Home() {
             >
               {carregando ? 'Cadastrando...' : 'Cadastrar'}
             </button>
-            <button link=""></button>
-
           </form>
 
+          <Link href="/login" className="meu-botao-login">
+          Já tem uma conta? Ir para o Login
+          </Link>
         </div>
 
       </div>
