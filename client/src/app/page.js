@@ -60,7 +60,7 @@ export default function Home() {
         body: JSON.stringify(formData)
       });
 
-      const data = await res.json();
+      const data = await res.text();
 
       if (!res.ok) throw new Error(data.mensagem);
 
