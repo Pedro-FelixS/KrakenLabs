@@ -16,7 +16,7 @@ const config = {
   }
 };
 
-async function conectarBD() {
+async function conectarBancoDeDados() {
   try {
     const pool = await sql.connect(config);
     console.log('Conectado ao SQL Server com sucesso!');
@@ -27,4 +27,4 @@ async function conectarBD() {
   }
 }
 
-module.exports = { conectarBD, sql };
+module.exports = { conectarBancoDeDados, sql };
