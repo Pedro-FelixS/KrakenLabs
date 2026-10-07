@@ -69,7 +69,7 @@ return (
   </div>
   <span className={styles.rodape}>
                 KrakenLabs <br/>
-                Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+                &copy;Feito pelos REAIS devs Seniors P. Felix e H. Pompei
               </span>
   </div>
 );
