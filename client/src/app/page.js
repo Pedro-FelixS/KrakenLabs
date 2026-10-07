@@ -227,12 +227,11 @@ export default function Home() {
             </label>
 
             <button
-  className={styles.botao}
-  type="submit"
-  disabled={carregando}
->
-  {carregando ? 'Cadastrando...' : 'Cadastrar'}
-</button>
+              type="submit"
+              disabled={carregando}
+            >
+              {carregando ? 'Cadastrando...' : 'Cadastrar'}
+            </button>
 
           </form>
 

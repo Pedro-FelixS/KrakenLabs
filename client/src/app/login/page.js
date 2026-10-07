@@ -29,7 +29,7 @@ return (
 
         <input
           name="email"
-          type="email"
+          type="email" size="30"
           placeholder="E-mail"
           required
         />
@@ -39,9 +39,10 @@ return (
 
         <input
           name="senha"
-          type="password"
+          type="password" size="30"
           placeholder="Senha"
           required
+          
         />
 
         <br/>
@@ -49,14 +50,14 @@ return (
 
         <button
           className={styles.botao}
-          type="submit"
+          type="submit" size="20"
         >
           Entrar
         </button>
 
       </form>
 
-      <br />
+      <br/>
 
       <Link
         href="/"
@@ -64,9 +65,12 @@ return (
       >
         Não possui conta? Faça seu cadastro!
       </Link>
-
     </div>
   </div>
+  <span className={styles.rodape}>
+                KrakenLabs <br/>
+                Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+              </span>
   </div>
 );
 }

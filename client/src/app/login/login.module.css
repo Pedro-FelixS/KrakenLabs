@@ -24,8 +24,8 @@
 .main {
   width: 100%;
   max-width: 800px;
-
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
 
@@ -40,6 +40,7 @@
   text-decoration: none;
   border: 1px solid white;
   border-radius: 8px;
+  align-items: center;
 }
 .botao {
   background-color: #0a2a3a;
@@ -48,6 +49,7 @@
   border: 1px solid white;
   border-radius: 8px;
   cursor: pointer;
+  align-items: center;
 }
 
 .botao:hover {
@@ -55,4 +57,18 @@
 }
 .meu-botao-login:hover {
   background-color: #10384d;
+}
+.statusContainer {
+  text-align: center;
+}
+.statusContainer h1{
+    margin: 0;
+    font-size: 45px;
+    text-shadow: 0 0 10px #0aabbd;  
+    font-family: "Caesar Dressing", system-ui;
+}
+.rodape {
+    text-align: center;
+    padding: 20px;
+    color: #c2c2c2;
 }
