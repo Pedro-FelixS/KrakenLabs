@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import Link from 'next/link';
+
 import styles from './page.module.css';
 
 const ESTADO_INICIAL = {
@@ -64,10 +66,10 @@ export default function Home() {
 
       const data = await res.text();
 
-      if (!res.ok) throw new Error(data.mensagem);
+      if (!res.ok) throw new Error(data);
 
       setStatusEnvio({
-        texto: data.mensagem,
+        texto: data,
         tipo: 'sucesso'
       });
 
@@ -93,7 +95,7 @@ export default function Home() {
 
       <div className={styles.main}>
 
-        <div className="status-container">
+        <div className={styles.statusContainer}>
 
           <h1>KrakenLabs</h1>
 
@@ -105,7 +107,7 @@ export default function Home() {
 
         </div>
 
-        <div className="usuario">
+        <div className={styles.usuario}>
 
           <h2>Cadastro de Usuário</h2>
 
@@ -124,9 +126,9 @@ export default function Home() {
 
           <form onSubmit={handleSubmit}>
 
-            <label className="cadastro">
+            <label className={styles.cadastro}>
 
-              <span className="grupo">
+              <span className={styles.grupo}>
                 Nome completo:
               </span>
 
@@ -141,9 +143,9 @@ export default function Home() {
 
             </label>
 
-            <label className="cadastro">
+            <label className={styles.cadastro}>
 
-              <span className="grupo">
+              <span className={styles.grupo}>
                 Senha (Mínimo de 8 caracteres):
               </span>
 
@@ -159,9 +161,9 @@ export default function Home() {
 
             </label>
 
-            <label className="cadastro">
+            <label className={styles.cadastro}>
 
-              <span className="grupo">
+              <span className={styles.grupo}>
                 CPF:
               </span>
 
@@ -176,9 +178,9 @@ export default function Home() {
 
             </label>
 
-            <label className="cadastro">
+            <label className={styles.cadastro}>
 
-              <span className="grupo">
+              <span className={styles.grupo}>
                 Data de aniversário:
               </span>
 
@@ -191,9 +193,9 @@ export default function Home() {
 
             </label>
 
-            <label className="cadastro">
+            <label className={styles.cadastro}>
 
-              <span className="grupo">
+              <span className={styles.grupo}>
                 Número de telefone:
               </span>
 
@@ -207,9 +209,9 @@ export default function Home() {
 
             </label>
 
-            <label className="cadastro">
+            <label className={styles.cadastro}>
 
-              <span className="grupo">
+              <span className={styles.grupo}>
                 E-mail:
               </span>
 
@@ -225,20 +227,22 @@ export default function Home() {
             </label>
 
             <button
-              type="submit"
-              disabled={carregando}
-              style={{
-                marginTop: '1rem',
-                padding: '0.5rem 1rem'
-              }}
-            >
-              {carregando ? 'Cadastrando...' : 'Cadastrar'}
-            </button>
+  className={styles.botao}
+  type="submit"
+  disabled={carregando}
+>
+  {carregando ? 'Cadastrando...' : 'Cadastrar'}
+</button>
+
           </form>
 
-          <Link href="/login" className="meu-botao-login">
-          Já tem uma conta? Ir para o Login
+          <Link
+            href="/login"
+            className={styles.meuBotaoLogin}
+          >
+            Já tem uma conta? Ir para o Login
           </Link>
+
         </div>
 
       </div>
