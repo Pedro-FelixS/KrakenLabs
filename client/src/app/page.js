@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import styles from './page.module.css';
 
 const ESTADO_INICIAL = {
   nome: '',
@@ -88,9 +89,9 @@ export default function Home() {
 
   return (
 
-    <div className="page">
+    <div className={styles.page}>
 
-      <div className="main">
+      <div className={styles.main}>
 
         <div className="status-container">
 

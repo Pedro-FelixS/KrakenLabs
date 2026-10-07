@@ -1,5 +1,10 @@
 .page {
+  min-height: 100vh;
+  width: 100%;
+
   margin: 0;
+  padding: 0;
+
   font-family: Arial, Helvetica, sans-serif;
   color: white;
 
@@ -12,130 +17,39 @@
     #0b2230
   );
 
-  min-height: 100vh;
-
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .main {
-  display: flex;
-  flex: 1;
   width: 100%;
   max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 120px 60px;
-}
 
-.intro {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: white;
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: white;
-}
-
-.intro a {
-  font-weight: 500;
-  color: white;
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+
+  padding: 60px;
 }
 
-a.primary {
-  background: white;
-  color: #020b12;
-  gap: 8px;
+.usuario {
+  text-align: center;
+  margin-top: 60px;
 }
 
-a.secondary {
-  border-color: white;
-  color: white;
+.cadastro {
+  display: block;
+  margin-bottom: 20px;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: #ccd0cf;
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: #253745;
-    border-color: transparent;
-  }
+.grupo {
+  display: block;
+  margin-bottom: 5px;
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-}
-
-.code {
-  font-family: monospace;
-  font-size: 0.9em;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+.cadastro input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }

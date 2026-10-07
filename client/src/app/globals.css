@@ -1,20 +1,13 @@
-.usuario {
-  text-align: center;
-  margin-top: 60px;
+* {
+  box-sizing: border-box;
 }
 
-.cadastro {
-  display: block;
-  margin-bottom: 20px;
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
-.grupo {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.cadastro input {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+body {
+  background: #020b12;
 }
