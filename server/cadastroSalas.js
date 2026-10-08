@@ -1,12 +1,14 @@
 const express = require('express');
 const { conectarBancoDeDados, sql} = require('./db')
 
+const app = express();
+app.use(express.json());
 const cadastroSala = express();
 
 cadastroSala.post('/paginaPrincipal', async(req, res) => {
     const{nome, codigo, capacidade, localizacao} = req.body;
     if (!nome || !codigo || !capacidade || !localizacao){
-        res.status(200).send("Preencha os campos adequadamente!");
+        res.status(400).send("Preencha os campos adequadamente!");
     }
     try{
         const puxar = await conectarBancoDeDados();
