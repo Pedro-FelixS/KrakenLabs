@@ -16,7 +16,7 @@ routes.post('/paginaPrincipal', async(req, res) => {
         .input('capacidade', sql.Int, Number(capacidade))
         .input('localizacao', sql.VarChar, localizacao)
         .query(`
-        INSERT INTO recursos (nome, codigo, capacidade, localização)
+        INSERT INTO recursos (nome, codigo, capacidade, localizacao)
         VALUES (@nome, @codigo, @capacidade, @localizacao)
       `);
     return res.status(201).send('laboratório cadastrado com sucesso!');
