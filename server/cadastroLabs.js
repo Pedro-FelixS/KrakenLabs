@@ -19,7 +19,7 @@ routes.post('/paginaPrincipal', async(req, res) => {
         INSERT INTO recursos (nome, codigo, capacidade, localizacao)
         VALUES (@nome, @codigo, @capacidade, @localizacao)
       `);
-    return res.status(201).send('Sala cadastrada com sucesso!');
+    return res.status(201).send('laboratório cadastrado com sucesso!');
 
         
     }
@@ -29,8 +29,8 @@ routes.post('/paginaPrincipal', async(req, res) => {
       return res.status(400).send('Já existe um recurso cadastrado com este código.');
     }
 
-    return res.status(500).send("Não foi possível cadastrar a sala.");
+    return res.status(500).send("Não foi possível cadastrar o laboratório ou sala.");
     }
-})
+});
 
 module.exports = routes;

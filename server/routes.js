@@ -6,6 +6,7 @@ const routes = express.Router();
 
 const usuarioRoutes = require('./cadastriUsuario');
 const salasRoutes = require('./cadastroSalas');
+const labsRoutes = require('./cadastroLabs');
 
 routes.post('/login', async(req, res) => {
    const { email, senha } = req.body;
