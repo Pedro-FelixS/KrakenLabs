@@ -23,10 +23,10 @@ return (
     
     <div className={styles.statusContainer}>
 
-      <h1>Realize o Login do KrakenLabs</h1>
-
+      <h1>Realize o Login do KrakenLabs</h1><br/><br/>
+  
       <form onSubmit={Login}>
-
+      
         <input
           name="email"
           type="email" size="30"
@@ -69,7 +69,7 @@ return (
   </div>
   <span className={styles.rodape}>
                 KrakenLabs <br/>
-                &copy;Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+                &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
               </span>
   </div>
 );
