@@ -37,15 +37,22 @@
   text-align: center;
   margin-top: 60px;
 }
+.usuario h2{
+    color: #b7d4df;
+    font-size: 23px;
+    font-family: "Astloch", system-ui;
+}
 
 .cadastro {
   display: block;
   margin-bottom: 20px;
+  color: #1192c9;
 }
 
 .grupo {
   display: block;
   margin-bottom: 5px;
+  color: #b7d4df;
 }
 
 .cadastro input {
@@ -82,6 +89,17 @@
 }
 .statusContainer {
   text-align: center;
+}
+.statusContainer h1{
+    margin: 0;
+    font-size: 45px;
+    text-shadow: 0 0 10px #0aabbd;  
+    font-family: "Caesar Dressing", system-ui;
+}
+.statusContainer p{
+    color: #b7d4df;
+    font-weight: bold;
+    font-size: 20px;
 }
 .rodape {
     text-align: center;

@@ -1,6 +1,10 @@
-import { Caesar_Dressing, Kings, Supermercado_One } from 'next/font/google';
+import { Astloch, Caesar_Dressing, Kings, Supermercado_One } from 'next/font/google';
 import "./globals.css";
 
+const astloch = Astloch({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+});
 const caesar = Caesar_Dressing({
   weight: '400',
   subsets: ['latin'],
