@@ -28,19 +28,7 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
-
   padding: 60px;
-}
-.meu-botao-login {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #0a2a3a;
-  color: white;
-  text-decoration: none;
-  border: 1px solid white;
-  border-radius: 8px;
-  align-items: center;
 }
 .botao {
   background-color: #0a2a3a;
@@ -51,12 +39,12 @@
   cursor: pointer;
   align-items: center;
 }
-
 .botao:hover {
   background-color: #10384d;
 }
-.meu-botao-login:hover {
-  background-color: #10384d;
+.meuBotaoLogin {
+  color: #b7d4df;
+  text-decoration: none;
 }
 .statusContainer {
   text-align: center;
@@ -66,6 +54,11 @@
     font-size: 45px;
     text-shadow: 0 0 10px #0aabbd;  
     font-family: "Caesar Dressing", system-ui;
+}
+.statusContainer input{
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 .rodape {
     text-align: center;

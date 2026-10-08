@@ -73,18 +73,12 @@
   background-color: #10384d;
 }
 
-.meu-botao-login {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #0a2a3a;
-  color: white;
+.meuBotaoLogin {
+  color: #b7d4df;
   text-decoration: none;
-  border: 1px solid white;
-  border-radius: 8px;
 }
 
-.meu-botao-login:hover {
+.meuBotaoLogin:hover {
   background-color: #10384d;
 }
 .statusContainer {
