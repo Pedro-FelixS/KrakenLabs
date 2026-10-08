@@ -1,8 +1,10 @@
 'use client'; 
 import styles from './login.module.css'
 import Link from 'next/link'; 
+import { useRouter } from 'next/navigation';
 
 export default function PaginaLogin() { 
+  const router = useRouter();
   const Login = async (e) => { // função que apenas é disparada quando o usuário entra no servidor
     const data = new FormData(e.target); //captura os dados inseridos no formulário
 
@@ -13,7 +15,11 @@ export default function PaginaLogin() {
     });
 
     const mensagem = await resultado.text();
+    if (!resultado.ok) {
     alert(mensagem);
+    return;
+}
+    router.push('/paginaPrincipal');
   };
 
 return (
@@ -54,7 +60,6 @@ return (
         >
           Entrar
         </button>
-
       </form>
 
       <br/>
@@ -65,6 +70,17 @@ return (
       >
         Não possui conta? Faça seu cadastro!
       </Link>
+
+      <br/>
+      <br/>
+
+      <button
+        className={styles.botao}
+        type="button"
+        onClick={() => router.push('/paginaPrincipal')}
+      >
+        Testar Página Principal
+      </button>
     </div>
   </div>
   <span className={styles.rodape}>
