@@ -9,7 +9,7 @@ export default function PaginaPrincipal() {
 
             <h2>Sistema de Reservas</h2>
 
-            <Link href="/laboratorios"
+            <Link href="/cadLab"
             className={Styles.botao}>
                 Cadastrar Laboratório
             </Link>
@@ -17,7 +17,7 @@ export default function PaginaPrincipal() {
             <br />
             <br />
 
-            <Link href="/salas"
+            <Link href="/cadSala"
             className={Styles.botao}>
                 Cadastrar Sala
             </Link>
