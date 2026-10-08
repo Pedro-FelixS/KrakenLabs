@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 
 const routes = express.Router();
 
+const usuarioRoutes = require('./cadastriUsuario');
+const salasRoutes = require('./cadastroSalas');
+
 routes.post('/login', async(req, res) => {
    const { email, senha } = req.body;
 

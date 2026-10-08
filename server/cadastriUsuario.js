@@ -14,6 +14,11 @@ router.post('/api/usuarios', async (req, res) => {
   if (senha.length < 8) {
     return res.status(400).send('A senha deve ter no mínimo 8 caracteres.');
   }
+ 
+  const cpfApenasNumeros = cpf.replace(/\D/g, '');
+  if (cpfApenasNumeros.length !== 11) {
+    return res.status(400).send('CPF inválido. O CPF deve conter exatamente 11 dígitos.');
+  }
 
   try {
     const pool = await conectarBancoDeDados();
