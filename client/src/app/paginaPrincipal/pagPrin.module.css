@@ -1,3 +1,46 @@
+.page {
+  min-height: 100vh;
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+
+  background: linear-gradient(
+    to bottom,
+    #020b12,
+    #041824,
+    #0a2a3a,
+    #10384d,
+    #0b2230
+  );
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px;
+}
+.main h1{
+  margin: 0;
+    font-size: 45px;
+    text-shadow: 0 0 10px #0aabbd;  
+    font-family: "Caesar Dressing", system-ui;
+}
+.main h2{
+  color: #b7d4df;
+    font-size: 30px;
+    font-family: "Astloch", system-ui;
+}
 .botao {
   background-color: #0a2a3a;
   color: white;
@@ -6,8 +49,9 @@
   border-radius: 8px;
   cursor: pointer;
   align-items: center;
+  gap: 15px;
+  text-decoration: none;
 }
-
 .botao:hover {
   background-color: #10384d;
 }

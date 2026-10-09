@@ -1,16 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import Styles from './pagPrin.module.css'
+import styles from './pagPrin.module.css'
 export default function PaginaPrincipal() {
     return (
-        <main>
+    <div className={styles.page}>
+      <div className={styles.main}>
             <h1>KrakenLabs</h1>
 
-            <h2>Sistema de Reservas</h2>
+            <h2>Sistema de reservas</h2>
 
             <Link href="/cadLab"
-            className={Styles.botao}>
+            className={styles.botao}>
                 Cadastrar Laboratório
             </Link>
 
@@ -18,7 +19,7 @@ export default function PaginaPrincipal() {
             <br />
 
             <Link href="/cadSala"
-            className={Styles.botao}>
+            className={styles.botao}>
                 Cadastrar Sala
             </Link>
 
@@ -26,9 +27,10 @@ export default function PaginaPrincipal() {
             <br />
 
             <Link href="/status"
-            className={Styles.botao}>
+            className={styles.botao}>
                 Cadastrar Status
             </Link>
-        </main>
+            </div>
+        </div>
     );
 }
