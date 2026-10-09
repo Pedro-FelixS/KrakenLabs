@@ -15,7 +15,7 @@ const ESTADO_INICIAL = {
 };
 
 export default function Home() {
-
+  const router = useRouter();
   const [mensagem, setMensagem] = useState('Carregando...');
   const [formData, setFormData] = useState(ESTADO_INICIAL);
   const [statusEnvio, setStatusEnvio] = useState(null);
@@ -67,6 +67,8 @@ export default function Home() {
       });
 
       setFormData(ESTADO_INICIAL);
+
+      router.push('/paginaPrincipal');
 
     } catch (err) {
 
