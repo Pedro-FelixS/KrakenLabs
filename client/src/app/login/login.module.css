@@ -46,16 +46,16 @@
   color: #b7d4df;
   text-decoration: none;
 }
-.statusContainer {
+.formContainer {
   text-align: center;
 }
-.statusContainer h1{
+.formContainer h1{
     margin: 0;
     font-size: 45px;
     text-shadow: 0 0 10px #0aabbd;  
     font-family: "Caesar Dressing", system-ui;
 }
-.statusContainer input{
+.formContainer input{
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;

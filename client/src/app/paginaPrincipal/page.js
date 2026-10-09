@@ -15,16 +15,22 @@ export default function PaginaPrincipal() {
                 Cadastrar Laboratório
             </Link>
 
+            <br/>
+            <br/>
+
             <Link href="/sala"
             className={styles.botao}>
                 Cadastrar Sala
             </Link>
 
+            <br/>
+            <br/>
+
             <Link href="/status"
             className={styles.botao}>
                 Cadastrar Status
             </Link>
-            </div>
         </div>
+    </div>
     );
 }

@@ -1,7 +1,11 @@
+import styles from './status.module.css';
 export default function status() {
     return (
-        <main>
-            <h1>Status</h1>
-        </main>
+        <div className={styles.page}>
+        <div className={styles.main}>
+            <h1>KrakenLabs</h1>
+            <h2>visualizar o Status</h2>
+        </div>
+        </div>
     );
 }

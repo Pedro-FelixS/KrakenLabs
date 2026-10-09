@@ -43,7 +43,7 @@ export default function LoginPage() {
   return (
     <div className={styles.page}>
       <div className={styles.main}>
-        <div className={styles.statusContainer}>
+        <div className={styles.formContainer}>
           <h1>Realize o Login do KrakenLabs</h1>
           <br /><br />
     
