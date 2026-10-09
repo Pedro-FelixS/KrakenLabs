@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
 import styles from './page.module.css';
 
 const ESTADO_INICIAL = {
@@ -32,24 +31,18 @@ export default function Home() {
   }, []);
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     if (formData.senha.length < 8) {
-
       setStatusEnvio({
         texto: 'A senha precisa ter pelo menos 8 caracteres.',
         tipo: 'erro'
       });
-
       return;
     }
 
