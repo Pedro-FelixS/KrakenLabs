@@ -1,7 +1,11 @@
+import styles from './lab.module.css'
 export default function lab() {
     return (
-        <main>
-            <h1>Cadastro de Laboratório</h1>
-        </main>
+    <div className={styles.page}>
+        <div className={styles.main}>
+            <h1>KrakenLabs</h1>
+            <h2>Cadastro de laboratório</h2>
+        </div>
+    </div>
     )
 }
