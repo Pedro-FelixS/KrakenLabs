@@ -1,4 +1,4 @@
-const LabModel = require('../models/labModel');
+const LabModel = require('../models/labsModels');
 
 class LabController {
   static async cadastrar(req, res) {

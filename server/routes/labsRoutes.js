@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const LabController = require('../controllers/labController');
+const LabController = require('../controllers/labsController');
 
-router.post('/cadLab', LabController.cadastrar);
+router.post('/lab', LabController.cadastrar);
 
 module.exports = router;
