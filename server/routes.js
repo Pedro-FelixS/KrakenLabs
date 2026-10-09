@@ -41,7 +41,6 @@ routes.post('/login', async(req, res) => {
     }
 });
 
-// 3. Conecta as rotas dos outros arquivos ao roteador principal
 routes.use(usuarioRoutes);
 routes.use(salasRoutes);
 routes.use(labsRoutes);
