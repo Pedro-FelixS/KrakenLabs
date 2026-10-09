@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const routes = express.Router();
 
-const usuarioRoutes = require('./cadastriUsuario');
+const usuarioRoutes = require('./routes/usuarioRoutes');
 const salasRoutes = require('./cadastroSalas');
 const labsRoutes = require('./cadastroLabs');
 
