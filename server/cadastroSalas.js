@@ -3,7 +3,7 @@ const { conectarBancoDeDados, sql} = require('./db')
 
 const routes = express.Router();
 
-routes.post('/paginaPrincipal', async(req, res) => {
+routes.post('/cadSala', async(req, res) => {
     const{nome, codigo, capacidade, localizacao} = req.body;
     if (!nome || !codigo || !capacidade || !localizacao){
        return  res.status(400).send("Preencha os campos adequadamente!");
