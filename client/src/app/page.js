@@ -101,10 +101,6 @@ export default function Home() {
 
           <p>Sistema de Reserva de Laboratórios e Salas</p>
 
-          <p>
-            Status do Servidor: <strong>{mensagem}</strong>
-          </p>
-
         </div>
 
         <div className={styles.usuario}>
@@ -123,8 +119,9 @@ export default function Home() {
             </p>
 
           )}
-
+    
           <form onSubmit={handleSubmit}>
+            <div className={styles.campos}>
 
             <label className={styles.cadastro}>
 
@@ -225,16 +222,18 @@ export default function Home() {
               />
 
             </label>
+            </div>
 
             <button
+              className={styles.botao}
               type="submit"
               disabled={carregando}
             >
               {carregando ? 'Cadastrando...' : 'Cadastrar'}
             </button>
-
+          
           </form>
-
+          <br/>
           <Link
             href="/login"
             className={styles.meuBotaoLogin}
@@ -250,6 +249,6 @@ export default function Home() {
               &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
           </span>
     </div>
-
+    
   );
 }
