@@ -41,17 +41,3 @@
     font-size: 30px;
     font-family: "Astloch", system-ui;
 }
-.botao {
-  background-color: #0a2a3a;
-  color: white;
-  padding: 10px 20px;
-  border: 1px solid white;
-  border-radius: 8px;
-  cursor: pointer;
-  align-items: center;
-  gap: 20px;
-  text-decoration: none;
-}
-.botao:hover {
-  background-color: #10384d;
-}

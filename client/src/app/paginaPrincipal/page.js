@@ -10,21 +10,15 @@ export default function PaginaPrincipal() {
 
             <h2>Sistema de reservas</h2>
 
-            <Link href="/cadLab"
+            <Link href="/lab"
             className={styles.botao}>
                 Cadastrar Laboratório
             </Link>
 
-            <br />
-            <br />
-
-            <Link href="/cadSala"
+            <Link href="/sala"
             className={styles.botao}>
                 Cadastrar Sala
             </Link>
-
-            <br />
-            <br />
 
             <Link href="/status"
             className={styles.botao}>
