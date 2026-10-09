@@ -7,6 +7,7 @@ const routes = express.Router();
 const usuarioRoutes = require('./cadastriUsuario');
 const salasRoutes = require('./cadastroSalas');
 const labsRoutes = require('./cadastroLabs');
+const labsStatus = require('./status');
 
 routes.post('/login', async(req, res) => {
    const { email, senha } = req.body;
@@ -44,5 +45,7 @@ routes.post('/login', async(req, res) => {
 // 3. Conecta as rotas dos outros arquivos ao roteador principal
 routes.use(usuarioRoutes);
 routes.use(salasRoutes);
+routes.use(labsRoutes);
+routes.use(labsStatus);
 
 module.exports = routes;
