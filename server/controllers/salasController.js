@@ -1,4 +1,4 @@
-const SalaModel = require('../models/salaModel');
+const SalaModel = require('../models/salaModels');
 
 class SalaController {
   static async cadastrar(req, res) {

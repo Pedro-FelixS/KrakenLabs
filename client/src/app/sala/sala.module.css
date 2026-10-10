@@ -47,3 +47,60 @@
   gap: 20px;
   justify-content: center;
 }
+.cadastro {
+  display: block;
+  margin-bottom: 20px;
+  color: #1192c9;
+  width: calc(50% - 10px);
+  box-sizing: border-box;
+}
+
+.grupo {
+  display: block;
+  margin-bottom: 5px;
+  color: #b7d4df;
+}
+
+.cadastro input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  background-color:#b7d4df;
+}
+.botao {
+  background-color: #0a2a3a;
+  color: white;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.botao:hover {
+  background-color: #10384d;
+}
+
+.meuBotaoLogin {
+  color: #b7d4df;
+  text-decoration: none;
+}
+
+.meuBotaoLogin:hover {
+  background-color: #10384d;
+}
+.formContainer {
+  text-align: center;
+}
+.formContainer h1{
+    margin: 0;
+    font-size: 45px;
+    text-shadow: 0 0 10px #0aabbd;  
+    font-family: "Caesar Dressing", system-ui;
+}
+.formContainer p{
+    color: #b7d4df;
+    font-weight: bold;
+    font-size: 20px;
+}

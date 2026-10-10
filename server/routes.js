@@ -42,7 +42,7 @@ routes.post('/login', async(req, res) => {
 });
 
 routes.use(usuarioRoutes);
-routes.use(salaRoutes);
+routes.use(salasRoutes);
 routes.use(labsRoutes);
 
 

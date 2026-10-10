@@ -1,5 +1,4 @@
 const { conectarBancoDeDados, sql } = require('../db');
-const SalaModel = require('../models/salaModels');
 class SalaModel {
   static async criarSala({ nome, codigo, capacidade, localizacao }) {
     const puxar = await conectarBancoDeDados();

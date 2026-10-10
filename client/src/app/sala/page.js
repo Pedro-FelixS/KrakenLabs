@@ -69,7 +69,7 @@ export default function sala() {
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
-                placeholder="Nome da Sala"
+                placeholder="Digite o nome da Sala"
                 required
               />
 
