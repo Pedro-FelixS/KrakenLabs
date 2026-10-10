@@ -48,14 +48,14 @@ export default function lab() {
             <div className={styles.main}>
              <div className={styles.formContainer}>
                 <h1>KrakenLabs</h1>
-                <h2>Cadastro de Sala</h2>
+                <h2>Cadastro de Laboratório</h2>
                 <form onSubmit={handleSubmit}>
                  <div className={styles.campos}>
 
             <label className={styles.cadastro}>
 
               <span className={styles.grupo}>
-                Nome da Sala:
+                Nome do Laboratório:
               </span>
 
               <input
@@ -63,7 +63,7 @@ export default function lab() {
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
-                placeholder="Digite o nome da Sala"
+                placeholder="Digite o nome do Laboratório"
                 required
               />
 
@@ -80,7 +80,7 @@ export default function lab() {
                 name="codigo"
                 value={formData.codigo}
                 onChange={handleChange}
-                placeholder="Código da Sala"
+                placeholder="Código do Laboratório"
                 required
               />
 
@@ -115,7 +115,7 @@ export default function lab() {
                 name="localizacao"
                 value={formData.localizacao}
                 onChange={handleChange}
-                placeholder="Localização da Sala"
+                placeholder="Localização do Laboratório"
                 required
               />
             </label>
@@ -124,7 +124,7 @@ export default function lab() {
             <button type="submit" 
             className={styles.botao}
             disabled={carregando}>
-                {carregando ? 'Cadastrando...' : 'Cadastrar Sala'}
+                {carregando ? 'Cadastrando...' : 'Cadastrar Laboratório'}
             </button>
 
             {mensagem && <p>{mensagem}</p>}
