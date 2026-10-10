@@ -1,6 +1,6 @@
 const { conectarBancoDeDados, sql } = require('../db');
 
-class StatusModel {
+class StatusModels {
   static async atualizarStatusRecurso({ recursoId, estado, observacao }) {
     const pool = await conectarBancoDeDados();
 
