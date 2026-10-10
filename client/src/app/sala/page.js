@@ -135,8 +135,12 @@ export default function sala() {
 
             {mensagem && <p>{mensagem}</p>}
             </form>
-             </div>
             </div>
         </div>
+          <span className={styles.rodape}>
+            KrakenLabs <br/>
+            &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+        </span>
+      </div>
     );
 }
