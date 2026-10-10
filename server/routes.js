@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const routes = express.Router();
 
 const usuarioRoutes = require('./routes/usuarioRoutes');
-const salasRoutes = require('./cadastroSalas');
+const salasRoutes = require('./routes/salaRoutes');
 const labsRoutes = require('./routes/labsRoutes');
 
 routes.post('/login', async(req, res) => {
@@ -42,7 +42,7 @@ routes.post('/login', async(req, res) => {
 });
 
 routes.use(usuarioRoutes);
-routes.use(salasRoutes);
+routes.use(salaRoutes);
 routes.use(labsRoutes);
 
 
