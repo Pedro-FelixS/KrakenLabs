@@ -87,34 +87,14 @@ export default function Home() {
   return (
 
     <div className={styles.page}>
-
       <div className={styles.main}>
-
         <div className={styles.statusContainer}>
-
           <h1>KrakenLabs</h1>
-
           <p>Sistema de Reserva de Laboratórios e Salas</p>
-
         </div>
 
         <div className={styles.usuario}>
-
           <h2>Cadastro de Usuário</h2>
-
-          {statusEnvio && (
-
-            <p
-              style={{
-                color: statusEnvio.tipo === 'sucesso' ? 'green' : 'red',
-                fontWeight: 'bold'
-              }}
-            >
-              {statusEnvio.texto}
-            </p>
-
-          )}
-    
           <form onSubmit={handleSubmit}>
             <div className={styles.campos}>
 

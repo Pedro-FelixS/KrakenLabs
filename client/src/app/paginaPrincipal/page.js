@@ -31,6 +31,10 @@ export default function PaginaPrincipal() {
                 Cadastrar Status
             </Link>
         </div>
+        <span className={styles.rodape}>
+        KrakenLabs <br />
+        &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+      </span>
     </div>
     );
 }

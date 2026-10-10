@@ -54,3 +54,8 @@
 .botao:hover {
   background-color: #10384d;
 }
+.rodape {
+    text-align: center;
+    padding: 20px;
+    color: #c2c2c2;
+}
