@@ -127,8 +127,10 @@ export default function sala() {
             </label>
 
             </div>
-            <button type="submit" disabled={carregando}>
-                            {carregando ? 'Cadastrando...' : 'Cadastrar Sala'}
+            <button type="submit" 
+            className={styles.botao}
+            disabled={carregando}>
+                {carregando ? 'Cadastrando...' : 'Cadastrar Sala'}
             </button>
 
             {mensagem && <p>{mensagem}</p>}
