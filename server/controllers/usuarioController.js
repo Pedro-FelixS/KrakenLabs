@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+const UsuarioModel = require('../models/usuarioModels');
 class UsuarioController {
   static async cadastrar(req, res) {
     const { nome, senha, cpf, dataNascimento, telefone, email } = req.body;
