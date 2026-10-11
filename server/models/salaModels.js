@@ -8,9 +8,10 @@ class SalaModel {
       .input('codigo', sql.VarChar, codigo)
       .input('capacidade', sql.Int, Number(capacidade))
       .input('localizacao', sql.VarChar, localizacao)
+      .input('ehlaboratorio', sql.Bit, 0)
       .query(`
-        INSERT INTO recursos (nome, codigo, capacidade, localizacao)
-        VALUES (@nome, @codigo, @capacidade, @localizacao)
+        INSERT INTO recursos (nome, codigo, capacidade, localizacao, ehlaboratorio)
+        VALUES (@nome, @codigo, @capacidade, @localizacao, 0)
       `);
   }
 }
