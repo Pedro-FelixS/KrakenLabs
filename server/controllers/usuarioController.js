@@ -20,7 +20,6 @@ class UsuarioController {
     try {
       const senhaHash = await bcrypt.hash(senha, 10);
 
-      // Chama o Model para inserir no banco de dados
       await UsuarioModel.criarUsuario({
         cpf: cpfApenasNumeros,
         nome,

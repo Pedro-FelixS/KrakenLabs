@@ -10,19 +10,21 @@ export default function StatusPage() {
   const [observacao, setObservacao] = useState('');
   const [carregando, setCarregando] = useState(false);
 
-  useEffect(() => {
-    async function carregarRecursos() {
-      try {
-        const res = await fetch('http://localhost:5000/status');
-        if (res.ok) {
-          const dados = await res.json();
-          setRecursos(dados);
-        }
-      } catch (erro) {
-        console.error('Erro ao buscar recursos:', erro);
+  // 1. Função isolada para buscar os recursos
+  const carregarRecursos = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/status');
+      if (res.ok) {
+        const dados = await res.json();
+        setRecursos(dados);
       }
+    } catch (erro) {
+      console.error('Erro ao buscar recursos:', erro);
     }
+  };
 
+  // 2. Chama na abertura da tela
+  useEffect(() => {
     carregarRecursos();
   }, []);
 
@@ -58,6 +60,9 @@ export default function StatusPage() {
       
       setObservacao('');
       setRecursoId('');
+      
+      // 3. Recarrega a lista do banco para atualizar o "Atual: Status" no select na hora!
+      carregarRecursos(); 
     } catch (erro) {
       alert('Erro ao conectar com o servidor.');
     } finally {

@@ -27,3 +27,5 @@ class StatusModels {
     return resultado.recordset;
   }
 }
+
+module.exports = StatusModels;
