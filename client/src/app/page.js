@@ -1,4 +1,5 @@
 'use client';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -51,7 +52,7 @@ export default function Home() {
 
     try {
 
-      const res = await fetch('http://localhost:5000/api/usuarios', {
+      const res = await fetch('http://${API_URL}/api/usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
