@@ -127,7 +127,6 @@ export default function lab() {
                 {carregando ? 'Cadastrando...' : 'Cadastrar Laboratório'}
             </button>
 
-            {mensagem && <p>{mensagem}</p>}
             </form>
             </div>
         </div>

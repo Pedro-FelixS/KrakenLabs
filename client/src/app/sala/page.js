@@ -133,7 +133,6 @@ export default function sala() {
                 {carregando ? 'Cadastrando...' : 'Cadastrar Sala'}
             </button>
 
-            {mensagem && <p>{mensagem}</p>}
             </form>
             </div>
         </div>
