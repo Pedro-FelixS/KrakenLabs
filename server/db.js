@@ -6,7 +6,7 @@ const config = {
   user: process.env.DB_USER,           
   password: process.env.DB_PASSWORD,  
   server: process.env.DB_SERVER || 'regulus.cotuca.unicamp.br',
-  database: process.env.DB_DATABASE || 'KrakenLabsDB',
+  database: process.env.DB_DATABASE || 'BD26577',
   port: 1433,
   options: {
     encrypt: false,                     
