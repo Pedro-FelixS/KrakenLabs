@@ -71,66 +71,81 @@ export default function StatusPage() {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.main}>
-        <h1>KrakenLabs</h1>
-        <h2>Gerenciar Status de Recurso</h2>
-
-        <form onSubmit={handleSalvarStatus}>
-          <div>
-            <label>Selecione o Laboratório / Sala:</label>
-            <br />
-            <select
-              value={recursoId}
-              onChange={(e) => setRecursoId(e.target.value)}
-              required
-            >
+  <div className={styles.page}>
+    <div className={styles.main}>
+        <div className={styles.formContainer}>
+            <h1>KrakenLabs</h1>
+            <h2>Gerenciar Status de Recurso</h2>
+            <form onSubmit={handleSalvarStatus}>
+              <div className={styles.campos}>
+                <label className={styles.cadastro}>
+                <span className={styles.grupo}>
+                  Selecione o Laboratório / Sala:
+                </span>
+              <select
+               value={recursoId}
+               onChange={(e) => setRecursoId(e.target.value)}
+               required
+              >
               <option value="">-- Selecione --</option>
-              {recursos.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.nome} ({item.codigo}) - Atual: {item.status_atual}
+                {recursos.map((item) => (
+               <option key={item.id} value={item.id}>
+              {item.nome} ({item.codigo}) - Atual: {item.status_atual}
                 </option>
-              ))}
-            </select>
-          </div>
+            ))}
+              </select>
+            </label>
 
-          <br />
+            <label className={styles.cadastro}>
+              <span className={styles.grupo}>
+                Novo Status:
+              </span>
 
-          <div>
-            <label>Novo Status:</label>
-            <br />
-            <select
+             <select
               value={estado}
               onChange={(e) => setEstado(e.target.value)}
+              required
             >
-              <option value="Livre">Livre</option>
-              <option value="Ocupado">Ocupado</option>
-              <option value="Em Manutenção">Em Manutenção</option>
-              <option value="Reservado">Reservado</option>
-            </select>
-          </div>
+                                <option value="Livre">Livre</option>
+                                <option value="Ocupado">Ocupado</option>
+                                <option value="Em Manutenção">Em Manutenção</option>
+                                <option value="Reservado">Reservado</option>
+                            </select>
+                        </label>
 
-          <br />
+                        <label className={styles.cadastro}>
+                            <span className={styles.grupo}>
+                                Observação / Motivo:
+                            </span>
 
-          <div>
-            <label>Observação / Motivo:</label>
-            <br />
-            <input
-              type="text"
-              placeholder="Ex: Projetor queimado, aula prática de Redes..."
-              value={observacao}
-              onChange={(e) => setObservacao(e.target.value)}
-              size="40"
-            />
-          </div>
+                            <input
+                                type="text"
+                                placeholder="Ex: Projetor queimado, aula prática de Redes..."
+                                value={observacao}
+                                onChange={(e) => setObservacao(e.target.value)}
+                                size="40"
+                            />
+                        </label>
 
-          <br /><br />
+                    </div>
 
-          <button type="submit" disabled={carregando}>
-            {carregando ? 'Atualizando...' : 'Atualizar Status'}
-          </button>
-        </form>
-      </div>
+                    <button
+                        type="submit"
+                        className={styles.botao}
+                        disabled={carregando}
+                    >
+                        {carregando ? 'Atualizando...' : 'Atualizar Status'}
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+        <span className={styles.rodape}>
+            KrakenLabs <br />
+            &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+        </span>
     </div>
-  );
+);
 }
