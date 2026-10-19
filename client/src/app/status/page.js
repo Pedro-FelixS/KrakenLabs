@@ -106,42 +106,36 @@ export default function StatusPage() {
               onChange={(e) => setEstado(e.target.value)}
               required
             >
-                                <option value="Livre">Livre</option>
-                                <option value="Ocupado">Ocupado</option>
-                                <option value="Em Manutenção">Em Manutenção</option>
-                                <option value="Reservado">Reservado</option>
-                            </select>
-                        </label>
+                <option value="Livre">Livre</option>
+                <option value="Ocupado">Ocupado</option>
+                <option value="Em Manutenção">Em Manutenção</option>
+                <option value="Reservado">Reservado</option>
+            </select>
+          </label>
 
-                        <label className={styles.cadastro}>
-                            <span className={styles.grupo}>
-                                Observação / Motivo:
-                            </span>
-
-                            <input
-                                type="text"
-                                placeholder="Ex: Projetor queimado, aula prática de Redes..."
-                                value={observacao}
-                                onChange={(e) => setObservacao(e.target.value)}
-                                size="40"
-                            />
-                        </label>
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        className={styles.botao}
-                        disabled={carregando}
-                    >
-                        {carregando ? 'Atualizando...' : 'Atualizar Status'}
-                    </button>
-
-                </form>
-
-            </div>
+        <label className={styles.cadastro}>
+            <span className={styles.grupo}>
+                Observação / Motivo:
+            </span>
+            <input
+                type="text"
+                placeholder="Ex: Projetor queimado, aula prática de Redes..."
+                value={observacao}
+                onChange={(e) => setObservacao(e.target.value)}
+                size="40"
+            />
+        </label>
+      </div>
+     <button
+        type="submit"
+        className={styles.botao}
+        disabled={carregando}
+      >
+        {carregando ? 'Atualizando...' : 'Atualizar Status'}
+    </button>
+        </form>
         </div>
-
+        </div>
         <span className={styles.rodape}>
             KrakenLabs <br />
             &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei

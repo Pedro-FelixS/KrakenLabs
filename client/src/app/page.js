@@ -224,6 +224,6 @@ export default function Home() {
               &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
           </span>
     </div>
-    
+   
   );
 }
