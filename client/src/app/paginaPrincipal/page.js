@@ -30,6 +30,13 @@ export default function PaginaPrincipal() {
             className={styles.botao}>
                 Cadastrar Status
             </Link>
+
+            <br />
+        <br />
+
+        <Link href="/reservas" className={styles.botao}>
+          Reservar Recursos
+        </Link>
         </div>
         <span className={styles.rodape}>
         KrakenLabs <br />
