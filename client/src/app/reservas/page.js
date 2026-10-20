@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './reserva.module.css';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export default function PaginaReservas() {
   const [reservas, setReservas] = useState([]);
@@ -24,10 +24,12 @@ export default function PaginaReservas() {
 
   const carregarReservas = async () => {
     try {
-      const res = await fetch(`${API_URL}/reservas`);
+      const res = await fetch(`http://localhost:5000/status_recursos`);
       if (!res.ok) throw new Error('Falha ao obter lista de reservas');
       const dados = await res.json();
-      if (Array.isArray(dados)) setReservas(dados);
+      if (Array.isArray(dados)) {
+        setReservas(dados);
+      }
     } catch (err) {
       console.error('Erro ao buscar reservas:', err);
     }
@@ -35,18 +37,24 @@ export default function PaginaReservas() {
 
   const carregarRecursos = async () => {
     try {
-      const res = await fetch(`${API_URL}/reservas/recursos`);
+      const res = await fetch(`http://localhost:5000/reservas/recursos`);
       if (!res.ok) throw new Error('Falha ao obter lista de recursos');
       const dados = await res.json();
       
       if (Array.isArray(dados)) {
-        setRecursosDisponiveis(dados);
-        if (dados.length > 0) {
-          setForm((prev) => ({ ...prev, codigo_recurso: dados[0].codigo }));
+        // Filtra apenas os recursos onde status_atual é 'Livre'
+        const livres = dados.filter(
+          (rec) => rec.status_atual && rec.status_atual.toString().trim().toLowerCase() === 'livre'
+        );
+
+        setRecursosDisponiveis(livres);
+
+        if (livres.length > 0) {
+          setForm((prev) => ({ ...prev, codigo_recurso: livres[0].codigo }));
         }
       }
     } catch (err) {
-      console.error('Erro ao buscar recursos do banco:', err);
+      console.error('Erro ao buscar recursos livres:', err);
     }
   };
 
@@ -139,7 +147,7 @@ export default function PaginaReservas() {
                 ))}
               </select>
             ) : (
-              <p style={{ color: '#ff6b6b', fontWeight: 'bold', margin: '5px 0' }}>
+              <p style={{ color: '#ff6b6b', fontWeight: 'bold' }}>
                 Nenhum recurso está com o status 'Livre' no momento.
               </p>
             )}
@@ -218,7 +226,7 @@ export default function PaginaReservas() {
             disabled={carregando || recursosDisponiveis.length === 0}
             className={styles.botao}
           >
-            {carregando ? 'Cadastrando...' : 'Cadastrar Reserva'}
+            {carregando ? 'Cadastrating...' : 'Cadastrar Reserva'}
           </button>
         </form>
 

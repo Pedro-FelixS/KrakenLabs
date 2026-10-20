@@ -13,7 +13,7 @@ export default function StatusPage() {
   // 1. Função isolada para buscar os recursos
   const carregarRecursos = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/status');
+      const res = await fetch('http://localhost:5000/status');
       if (res.ok) {
         const dados = await res.json();
         setRecursos(dados);
@@ -39,7 +39,7 @@ export default function StatusPage() {
     setCarregando(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/status/alterar', {
+      const res = await fetch('http://localhost:5000/status/alterar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
