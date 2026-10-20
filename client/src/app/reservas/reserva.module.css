@@ -1,0 +1,203 @@
+.page {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  background: linear-gradient(
+    to bottom,
+    #020b12,
+    #041824,
+    #0a2a3a,
+    #10384d,
+    #0b2230
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.main h1 {
+  margin: 0;
+  font-size: 45px;
+  text-shadow: 0 0 10px #0aabbd;
+  font-family: "Caesar Dressing", system-ui;
+  text-align: center;
+}
+
+.subtitulo {
+  color: #b7d4df;
+  font-size: 26px;
+  font-family: "Astloch", system-ui;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.alertaSucesso {
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #28a745;
+  width: 100%;
+  text-align: center;
+}
+
+.alertaErro {
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #dc3545;
+  width: 100%;
+  text-align: center;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: rgba(10, 42, 58, 0.6);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #10384d;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.campoGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.campoGroup label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #b7d4df;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 10px;
+  background-color: #020b12;
+  border: 1px solid #10384d;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.input:focus,
+.select:focus {
+  border-color: #0aabbd;
+  box-shadow: 0 0 5px #0aabbd;
+}
+
+.linhaDupla {
+  display: flex;
+  gap: 15px;
+}
+
+.linhaDupla > div {
+  flex: 1;
+}
+
+.botao {
+  background-color: #0a2a3a;
+  color: white;
+  padding: 12px 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.botao:hover {
+  background-color: #10384d;
+}
+
+.botao:disabled {
+  background-color: #0b2230;
+  border-color: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.listaReservas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.reservaItem {
+  padding: 14px;
+  border-bottom: 1px solid #10384d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(2, 11, 18, 0.4);
+  margin-bottom: 8px;
+  border-radius: 6px;
+}
+
+.reservaInfo strong {
+  color: #ffffff;
+}
+
+.reservaInfo small {
+  color: #b7d4df;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.statusBloqueado {
+  background-color: #dc3545;
+}
+
+.statusOcupado {
+  background-color: #fd7e14;
+}
+
+.statusReservado {
+  background-color: #0aabbd;
+}
+
+.statusLivre {
+  background-color: #28a745;
+}
+
+.rodape {
+  text-align: center;
+  padding: 20px;
+  color: #c2c2c2;
+}
