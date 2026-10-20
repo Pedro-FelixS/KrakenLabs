@@ -133,7 +133,7 @@ export default function StatusPage() {
       >
         {carregando ? 'Atualizando...' : 'Atualizar Status'}
     </button>
-        </form>
+       </form>
         </div>
         </div>
         <span className={styles.rodape}>
