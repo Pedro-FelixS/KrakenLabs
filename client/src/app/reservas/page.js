@@ -45,7 +45,7 @@ export default function PaginaReservas() {
     setCarregando(true);
 
     try {
-      const res = await fetch(`${API_URL}/reservas/criar`, {
+      const res = await fetch(`${API_URL}/reservas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
