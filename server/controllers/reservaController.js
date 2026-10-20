@@ -1,6 +1,16 @@
-const ReservaModel = require('../models/reservaModel');
+const ReservaModel = require('../models/reservaModels');
 
 const ReservaController = {
+  listarRecursos: async (req, res) => {
+    try {
+      const recursos = await ReservaModel.buscarRecursos();
+      res.status(200).json(recursos);
+    } catch (error) {
+      console.error('Erro ao buscar recursos no banco:', error);
+      res.status(500).json({ error: 'Erro ao buscar a lista de recursos.' });
+    }
+  },
+
   listarReservas: async (req, res) => {
     try {
       const reservas = await ReservaModel.getAll();
@@ -11,15 +21,13 @@ const ReservaController = {
   },
 
   criarReserva: async (req, res) => {
-    const { codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status } = req.body;
+    const { codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim } = req.body;
 
-    // Validação de campos obrigatórios
     if (!codigo_recurso || !usuario_nome || !data_inicio || !data_fim || !hora_inicio || !hora_fim) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
     }
 
     try {
-      // Regra de negócio: verificar se o recurso está disponível
       const conflitos = await ReservaModel.verificarDisponibilidade(
         codigo_recurso, data_inicio, data_fim, hora_inicio, hora_fim
       );

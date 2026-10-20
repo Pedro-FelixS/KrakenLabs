@@ -8,6 +8,7 @@ const usuarioRoutes = require('./routes/usuarioRoutes');
 const salasRoutes = require('./routes/salaRoutes');
 const labsRoutes = require('./routes/labsRoutes');
 const statusRoutes = require('./routes/statusRoutes');
+const reservaRoutes = require('./routes/reservaRoutes');
 
 routes.post('/login', async(req, res) => {
    const { email, senha } = req.body;
@@ -46,5 +47,6 @@ routes.use(usuarioRoutes);
 routes.use(salasRoutes);
 routes.use(labsRoutes);
 routes.use(statusRoutes);
+routes.use('/reservas', reservaRoutes);
 
 module.exports = routes;

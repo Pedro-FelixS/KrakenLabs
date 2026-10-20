@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import styles from './reserva.module.css';
 
 const API_URL = 'http://localhost:5000/api';
 
 export default function PaginaReservas() {
   const [reservas, setReservas] = useState([]);
+  const [recursosDisponiveis, setRecursosDisponiveis] = useState([]);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
   const [carregando, setCarregando] = useState(false);
 
@@ -31,8 +33,26 @@ export default function PaginaReservas() {
     }
   };
 
+  const carregarRecursos = async () => {
+    try {
+      const res = await fetch(`${API_URL}/reservas/recursos`);
+      if (!res.ok) throw new Error('Falha ao obter lista de recursos');
+      const dados = await res.json();
+      
+      if (Array.isArray(dados)) {
+        setRecursosDisponiveis(dados);
+        if (dados.length > 0) {
+          setForm((prev) => ({ ...prev, codigo_recurso: dados[0].codigo }));
+        }
+      }
+    } catch (err) {
+      console.error('Erro ao buscar recursos do banco:', err);
+    }
+  };
+
   useEffect(() => {
     carregarReservas();
+    carregarRecursos();
   }, []);
 
   const handleChange = (e) => {
@@ -45,7 +65,7 @@ export default function PaginaReservas() {
     setCarregando(true);
 
     try {
-      const res = await fetch(`${API_URL}/reservas`, {
+      const res = await fetch(`${API_URL}/reservas/criar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
@@ -60,17 +80,18 @@ export default function PaginaReservas() {
 
       setMensagem({ tipo: 'sucesso', texto: 'Reserva cadastrada com sucesso!' });
       
-      setForm({
-        codigo_recurso: '',
+      setForm((prev) => ({
+        ...prev,
         usuario_nome: '',
         data_inicio: '',
         data_fim: '',
         hora_inicio: '',
         hora_fim: '',
         status: 'Reservado'
-      });
+      }));
 
       carregarReservas();
+      carregarRecursos();
     } catch (err) {
       setMensagem({ tipo: 'erro', texto: 'Erro de comunicação com o servidor backend.' });
     } finally {
@@ -88,144 +109,151 @@ export default function PaginaReservas() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.titulo}>Cadastro de Reserva de Recursos</h1>
+    <div className={styles.page}>
+      <div className={styles.main}>
+        <h1>KrakenLabs</h1>
+        <h2 className={styles.subtitulo}>Reserva de Recursos</h2>
 
-      {mensagem.texto && (
-        <div className={mensagem.tipo === 'erro' ? styles.alertaErro : styles.alertaSucesso}>
-          {mensagem.texto}
-        </div>
-      )}
+        {mensagem.texto && (
+          <div className={mensagem.tipo === 'erro' ? styles.alertaErro : styles.alertaSucesso}>
+            {mensagem.texto}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} className={styles.formulario}>
-        <div className={styles.campoGroup}>
-          <label htmlFor="codigo_recurso">Código do Recurso:</label>
-          <input 
-            id="codigo_recurso"
-            type="text" 
-            name="codigo_recurso" 
-            placeholder="Ex: LAB-01 ou SALA-202" 
-            value={form.codigo_recurso} 
-            onChange={handleChange} 
-            required 
-            className={styles.input}
-          />
-        </div>
-
-        <div className={styles.campoGroup}>
-          <label htmlFor="usuario_nome">Usuário Solicitante:</label>
-          <input 
-            id="usuario_nome"
-            type="text" 
-            name="usuario_nome" 
-            placeholder="Ex: João da Silva" 
-            value={form.usuario_nome} 
-            onChange={handleChange} 
-            required 
-            className={styles.input}
-          />
-        </div>
-
-        <div className={styles.linhaDupla}>
+        <form onSubmit={handleSubmit} className={styles.formulario}>
           <div className={styles.campoGroup}>
-            <label htmlFor="data_inicio">Data Inicial:</label>
+            <label htmlFor="codigo_recurso">Selecione o Recurso Livre:</label>
+            {recursosDisponiveis.length > 0 ? (
+              <select 
+                id="codigo_recurso"
+                name="codigo_recurso" 
+                value={form.codigo_recurso} 
+                onChange={handleChange} 
+                className={styles.select}
+                required
+              >
+                {recursosDisponiveis.map((rec) => (
+                  <option key={rec.id} value={rec.codigo}>
+                    [{rec.codigo}] {rec.nome} — ({rec.ehLaboratorio ? 'Laboratório' : 'Sala'}) | Cap: {rec.capacidade}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p style={{ color: '#ff6b6b', fontWeight: 'bold', margin: '5px 0' }}>
+                Nenhum recurso está com o status 'Livre' no momento.
+              </p>
+            )}
+          </div>
+
+          <div className={styles.campoGroup}>
+            <label htmlFor="usuario_nome">Usuário Solicitante:</label>
             <input 
-              id="data_inicio"
-              type="date" 
-              name="data_inicio" 
-              value={form.data_inicio} 
+              id="usuario_nome"
+              type="text" 
+              name="usuario_nome" 
+              placeholder="Ex: João da Silva" 
+              value={form.usuario_nome} 
               onChange={handleChange} 
               required 
               className={styles.input}
             />
           </div>
-          <div className={styles.campoGroup}>
-            <label htmlFor="data_fim">Data Final:</label>
-            <input 
-              id="data_fim"
-              type="date" 
-              name="data_fim" 
-              value={form.data_fim} 
-              onChange={handleChange} 
-              required 
-              className={styles.input}
-            />
-          </div>
-        </div>
 
-        <div className={styles.linhaDupla}>
-          <div className={styles.campoGroup}>
-            <label htmlFor="hora_inicio">Hora Inicial:</label>
-            <input 
-              id="hora_inicio"
-              type="time" 
-              name="hora_inicio" 
-              value={form.hora_inicio} 
-              onChange={handleChange} 
-              required 
-              className={styles.input}
-            />
+          <div className={styles.linhaDupla}>
+            <div className={styles.campoGroup}>
+              <label htmlFor="data_inicio">Data Inicial:</label>
+              <input 
+                id="data_inicio"
+                type="date" 
+                name="data_inicio" 
+                value={form.data_inicio} 
+                onChange={handleChange} 
+                required 
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.campoGroup}>
+              <label htmlFor="data_fim">Data Final:</label>
+              <input 
+                id="data_fim"
+                type="date" 
+                name="data_fim" 
+                value={form.data_fim} 
+                onChange={handleChange} 
+                required 
+                className={styles.input}
+              />
+            </div>
           </div>
-          <div className={styles.campoGroup}>
-            <label htmlFor="hora_fim">Hora Final:</label>
-            <input 
-              id="hora_fim"
-              type="time" 
-              name="hora_fim" 
-              value={form.hora_fim} 
-              onChange={handleChange} 
-              required 
-              className={styles.input}
-            />
-          </div>
-        </div>
 
-        <div className={styles.campoGroup}>
-          <label htmlFor="status">Status Inicial da Reserva:</label>
-          <select 
-            id="status"
-            name="status" 
-            value={form.status} 
-            onChange={handleChange} 
-            className={styles.select}
+          <div className={styles.linhaDupla}>
+            <div className={styles.campoGroup}>
+              <label htmlFor="hora_inicio">Hora Inicial:</label>
+              <input 
+                id="hora_inicio"
+                type="time" 
+                name="hora_inicio" 
+                value={form.hora_inicio} 
+                onChange={handleChange} 
+                required 
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.campoGroup}>
+              <label htmlFor="hora_fim">Hora Final:</label>
+              <input 
+                id="hora_fim"
+                type="time" 
+                name="hora_fim" 
+                value={form.hora_fim} 
+                onChange={handleChange} 
+                required 
+                className={styles.input}
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={carregando || recursosDisponiveis.length === 0}
+            className={styles.botao}
           >
-            <option value="Reservado">Reservado (Aguardando uso)</option>
-            <option value="Ocupado">Ocupado (Em uso)</option>
-            <option value="Bloqueado">Bloqueado (Manutenção)</option>
-            <option value="Livre">Livre</option>
-          </select>
-        </div>
+            {carregando ? 'Cadastrando...' : 'Cadastrar Reserva'}
+          </button>
+        </form>
 
-        <button 
-          type="submit" 
-          disabled={carregando}
-          className={styles.botaoSubmit}
-        >
-          {carregando ? 'Cadastrando...' : 'Cadastrar Reserva'}
-        </button>
-      </form>
+        <h2 className={styles.subtitulo}>Reservas Existentes</h2>
+        {reservas.length === 0 ? (
+          <p style={{ color: '#b7d4df' }}>Nenhuma reserva encontrada no momento.</p>
+        ) : (
+          <ul className={styles.listaReservas}>
+            {reservas.map((r) => (
+              <li key={r.id} className={styles.reservaItem}>
+                <div className={styles.reservaInfo}>
+                  <strong>Recurso: {r.codigo_recurso}</strong> — Por <b>{r.usuario_nome}</b>
+                  <br />
+                  <small>
+                    Período: {r.data_inicio} até {r.data_fim} | Horário: {r.hora_inicio} às {r.hora_fim}
+                  </small>
+                </div>
+                <span className={getBadgeClass(r.status)}>
+                  {r.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      <h2 className={styles.subtitulo}>Reservas e Bloqueios Existentes</h2>
-      {reservas.length === 0 ? (
-        <p>Nenhuma reserva encontrada no momento.</p>
-      ) : (
-        <ul className={styles.listaReservas}>
-          {reservas.map((r) => (
-            <li key={r.id} className={styles.reservaItem}>
-              <div className={styles.reservaInfo}>
-                <strong>Recurso: {r.codigo_recurso}</strong> — Por <b>{r.usuario_nome}</b>
-                <br />
-                <small>
-                  Período: {r.data_inicio} até {r.data_fim} | Horário: {r.hora_inicio} às {r.hora_fim}
-                </small>
-              </div>
-              <span className={getBadgeClass(r.status)}>
-                {r.status}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+        <br />
+        <Link href="/paginaPrincipal" className={styles.botao}>
+          Voltar ao Menu Principal
+        </Link>
+      </div>
+
+      <span className={styles.rodape}>
+        KrakenLabs <br />
+        &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
+      </span>
     </div>
   );
 }

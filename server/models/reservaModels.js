@@ -1,13 +1,16 @@
-const db = require('../db');
+const db = require('../db'); 
 
 const ReservaModel = {
-  // Listar todas as reservas
-  getAll: async () => {
-    const result = await db.query('SELECT * FROM Reservas ORDER BY data_inicio, hora_inicio');
-    return result.recordset || result;
+  buscarRecursos: async () => {
+    const result = await db.query("SELECT * FROM recursos ORDER BY nome");
+    return result.recordset || result || [];
   },
 
-  // Verificar se o recurso está Bloqueado, Ocupado ou Reservado no período selecionado
+  getAll: async () => {
+    const result = await db.query('SELECT * FROM Reservas ORDER BY data_inicio DESC, hora_inicio DESC');
+    return result.recordset || result || [];
+  },
+
   verificarDisponibilidade: async (codigo_recurso, data_inicio, data_fim, hora_inicio, hora_fim) => {
     const result = await db.query(`
       SELECT * FROM Reservas 
@@ -20,11 +23,9 @@ const ReservaModel = {
           (hora_inicio >= '${hora_inicio}' AND hora_fim <= '${hora_fim}')
         )
     `);
-    const recordset = result.recordset || result;
-    return recordset; // Retorna os conflitos encontrados
+    return result.recordset || result || [];
   },
 
-  // Criar nova reserva
   create: async (dados) => {
     const { codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status } = dados;
     const statusFinal = status || 'Reservado';
