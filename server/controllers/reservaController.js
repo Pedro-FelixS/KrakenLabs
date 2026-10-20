@@ -2,14 +2,16 @@ const ReservaModel = require('../models/reservaModels');
 
 const ReservaController = {
   listarRecursos: async (req, res) => {
-    try {
-      const recursos = await ReservaModel.buscarRecursos();
-      res.status(200).json(recursos);
-    } catch (error) {
-      console.error('Erro ao buscar recursos no banco:', error);
-      res.status(500).json({ error: 'Erro ao buscar a lista de recursos.' });
-    }
-  },
+  try {
+    const recursos = await ReservaModel.buscarRecursos();
+    // Garante envio direto da lista
+    const lista = recursos.recordset || recursos;
+    res.status(200).json(lista);
+  } catch (error) {
+    console.error('Erro ao buscar recursos:', error);
+    res.status(500).json({ error: 'Erro ao buscar a lista de recursos.' });
+  }
+},
 
   listarReservas: async (req, res) => {
     try {
