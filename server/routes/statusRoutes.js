@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const StatusController = require('../controllers/statusController');
+const ReservaController = require('../controllers/reservaController');
 
-router.post('/status/alterar', StatusController.alterarStatus);
+// Rota para buscar laboratórios/salas para o select
+router.get('/recursos', ReservaController.listarRecursos);
 
-router.get('/status', StatusController.listarStatus);
+// Rota para listar todas as reservas criadas
+router.get('/', ReservaController.listarReservas);
+
+// Rota para cadastrar uma nova reserva
+router.post('/criar', ReservaController.criarReserva);
 
 module.exports = router;

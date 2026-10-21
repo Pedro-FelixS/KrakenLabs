@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './reserva.module.css';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = 'http://localhost:5000';
 
 export default function PaginaReservas() {
+  const [montado, setMontado] = useState(false);
   const [reservas, setReservas] = useState([]);
   const [recursosDisponiveis, setRecursosDisponiveis] = useState([]);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
@@ -24,12 +25,10 @@ export default function PaginaReservas() {
 
   const carregarReservas = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/status_recursos`);
+      const res = await fetch(`${API_URL}/reservas`);
       if (!res.ok) throw new Error('Falha ao obter lista de reservas');
       const dados = await res.json();
-      if (Array.isArray(dados)) {
-        setReservas(dados);
-      }
+      if (Array.isArray(dados)) setReservas(dados);
     } catch (err) {
       console.error('Erro ao buscar reservas:', err);
     }
@@ -37,28 +36,30 @@ export default function PaginaReservas() {
 
   const carregarRecursos = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/reservas/recursos`);
+      const res = await fetch(`${API_URL}/reservas/recursos`);
       if (!res.ok) throw new Error('Falha ao obter lista de recursos');
       const dados = await res.json();
       
-      if (Array.isArray(dados)) {
-        // Filtra apenas os recursos onde status_atual é 'Livre'
-        const livres = dados.filter(
-          (rec) => rec.status_atual && rec.status_atual.toString().trim().toLowerCase() === 'livre'
-        );
+      const listaArray = Array.isArray(dados) ? dados : (dados.recordset || []);
 
-        setRecursosDisponiveis(livres);
+      const labsLivres = listaArray.filter((rec) => {
+        const eLaboratorio = rec.ehLaboratorio == 1 || rec.ehLaboratorio === true;
+        const estaLivre = rec.status_atual && rec.status_atual.toString().trim().toLowerCase() === 'livre';
+        return eLaboratorio && estaLivre;
+      });
 
-        if (livres.length > 0) {
-          setForm((prev) => ({ ...prev, codigo_recurso: livres[0].codigo }));
-        }
+      setRecursosDisponiveis(labsLivres);
+
+      if (labsLivres.length > 0) {
+        setForm((prev) => ({ ...prev, codigo_recurso: labsLivres[0].codigo }));
       }
     } catch (err) {
-      console.error('Erro ao buscar recursos livres:', err);
+      console.error('Erro ao buscar laboratórios livres:', err);
     }
   };
 
   useEffect(() => {
+    setMontado(true);
     carregarReservas();
     carregarRecursos();
   }, []);
@@ -67,6 +68,7 @@ export default function PaginaReservas() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // FUNÇÃO QUE ESTAVA FALTANDO:
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensagem({ tipo: '', texto: '' });
@@ -79,10 +81,10 @@ export default function PaginaReservas() {
         body: JSON.stringify(form)
       });
 
-      const data = await res.json();
+      const dataText = await res.text();
 
       if (!res.ok) {
-        setMensagem({ tipo: 'erro', texto: data.error || 'Erro ao cadastrar reserva.' });
+        setMensagem({ tipo: 'erro', texto: dataText || 'Erro ao cadastrar reserva.' });
         return;
       }
 
@@ -116,6 +118,8 @@ export default function PaginaReservas() {
     }
   };
 
+  if (!montado) return null;
+
   return (
     <div className={styles.page}>
       <div className={styles.main}>
@@ -148,7 +152,7 @@ export default function PaginaReservas() {
               </select>
             ) : (
               <p style={{ color: '#ff6b6b', fontWeight: 'bold' }}>
-                Nenhum recurso está com o status 'Livre' no momento.
+                Nenhum laboratório está com o status 'Livre' no momento.
               </p>
             )}
           </div>
@@ -178,6 +182,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
             <div className={styles.campoGroup}>
@@ -190,6 +195,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -205,6 +211,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
             <div className={styles.campoGroup}>
@@ -217,6 +224,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -226,7 +234,7 @@ export default function PaginaReservas() {
             disabled={carregando || recursosDisponiveis.length === 0}
             className={styles.botao}
           >
-            {carregando ? 'Cadastrating...' : 'Cadastrar Reserva'}
+            {carregando ? 'Cadastrando...' : 'Cadastrar Reserva'}
           </button>
         </form>
 
@@ -258,10 +266,10 @@ export default function PaginaReservas() {
         </Link>
       </div>
 
-      <span className={styles.rodape}>
+      <footer className={styles.rodape}>
         KrakenLabs <br />
         &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
-      </span>
+      </footer>
     </div>
   );
 }
