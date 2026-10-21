@@ -1,7 +1,7 @@
 const { conectarBancoDeDados, sql } = require('../db');
 
 class ReservaModel {
-
+  // 1. Busca todos os recursos
   static async buscarRecursos() {
     const pool = await conectarBancoDeDados();
     const resultado = await pool.request().query(`
@@ -12,33 +12,33 @@ class ReservaModel {
         capacidade, 
         localizacao, 
         ehLaboratorio, 
-        ISNULL(status_atual, 'Livre') AS status_atual
+        status_atual
       FROM recursos
-      ORDER BY nome
+      ORDER BY nome ASC
     `);
     return resultado.recordset;
   }
 
-  // Lista todas as reservas cadastradas
+  // 2. Busca o histórico de reservas
   static async getAll() {
     const pool = await conectarBancoDeDados();
     const resultado = await pool.request().query(`
       SELECT id, codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status
       FROM Reservas
-      ORDER BY data_inicio DESC, hora_inicio DESC
+      ORDER BY id DESC
     `);
     return resultado.recordset;
   }
 
-  // Verifica se há conflito de horários para a nova reserva
+  // 3. Método que estava faltando: Verifica conflitos de horários
   static async verificarDisponibilidade(codigo_recurso, data_inicio, data_fim, hora_inicio, hora_fim) {
     const pool = await conectarBancoDeDados();
     const resultado = await pool.request()
-      .input('codigo_recurso', sql.VarChar, codigo_recurso)
+      .input('codigo_recurso', sql.VarChar(20), codigo_recurso)
       .input('data_inicio', sql.Date, data_inicio)
       .input('data_fim', sql.Date, data_fim)
-      .input('hora_inicio', sql.VarChar, hora_inicio)
-      .input('hora_fim', sql.VarChar, hora_fim)
+      .input('hora_inicio', sql.VarChar(10), hora_inicio)
+      .input('hora_fim', sql.VarChar(10), hora_fim)
       .query(`
         SELECT * FROM Reservas 
         WHERE codigo_recurso = @codigo_recurso
@@ -53,19 +53,19 @@ class ReservaModel {
     return resultado.recordset;
   }
 
-
+  // 4. Cria o registro da nova reserva
   static async create(dados) {
     const { codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status } = dados;
     const pool = await conectarBancoDeDados();
 
     await pool.request()
-      .input('codigo_recurso', sql.VarChar, codigo_recurso)
-      .input('usuario_nome', sql.VarChar, usuario_nome)
+      .input('codigo_recurso', sql.VarChar(20), codigo_recurso)
+      .input('usuario_nome', sql.VarChar(100), usuario_nome)
       .input('data_inicio', sql.Date, data_inicio)
       .input('data_fim', sql.Date, data_fim)
-      .input('hora_inicio', sql.VarChar, hora_inicio)
-      .input('hora_fim', sql.VarChar, hora_fim)
-      .input('status', sql.VarChar, status || 'Reservado')
+      .input('hora_inicio', sql.VarChar(10), hora_inicio)
+      .input('hora_fim', sql.VarChar(10), hora_fim)
+      .input('status', sql.VarChar(20), status || 'Reservado')
       .query(`
         INSERT INTO Reservas (codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status)
         VALUES (@codigo_recurso, @usuario_nome, @data_inicio, @data_fim, @hora_inicio, @hora_fim, @status)

@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './reserva.module.css';
 
-const API_URL = 'http://localhost:5000';
-
 export default function PaginaReservas() {
   const [montado, setMontado] = useState(false);
   const [reservas, setReservas] = useState([]);
@@ -23,68 +21,112 @@ export default function PaginaReservas() {
     status: 'Reservado'
   });
 
-  const carregarReservas = async () => {
-    try {
-      const res = await fetch(`${API_URL}/reservas`);
-      if (!res.ok) throw new Error('Falha ao obter lista de reservas');
-      const dados = await res.json();
-      if (Array.isArray(dados)) setReservas(dados);
-    } catch (err) {
-      console.error('Erro ao buscar reservas:', err);
+  // Busca recursos livres na tabela 'recursos'
+  const carregarRecursos = async () => {
+    const urlsParaTestar = [
+      'http://localhost:5000/api/reservas/recursos',
+      'http://localhost:5000/reservas/recursos'
+    ];
+
+    let dados = null;
+
+    for (const url of urlsParaTestar) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          dados = await res.json();
+          break;
+        }
+      } catch (e) {
+        // Tenta a próxima URL no loop
+      }
+    }
+
+    if (!dados) {
+      console.error('Erro ao conectar com o backend para buscar recursos.');
+      return;
+    }
+
+    const listaArray = Array.isArray(dados) ? dados : (dados.recordset || []);
+
+    // Filtra apenas os recursos cujo status_atual seja 'Livre'
+    const livres = listaArray.filter((rec) => {
+      const status = rec.status_atual ? rec.status_atual.toString().trim().toLowerCase() : '';
+      return status === 'livre';
+    });
+
+    setRecursosDisponiveis(livres);
+
+    if (livres.length > 0) {
+      setForm((prev) => ({ ...prev, codigo_recurso: livres[0].codigo }));
     }
   };
 
-  const carregarRecursos = async () => {
-    try {
-      const res = await fetch(`${API_URL}/reservas/recursos`);
-      if (!res.ok) throw new Error('Falha ao obter lista de recursos');
-      const dados = await res.json();
-      
-      const listaArray = Array.isArray(dados) ? dados : (dados.recordset || []);
+  // Busca o histórico de reservas
+  const carregarReservas = async () => {
+    const urlsParaTestar = [
+      'http://localhost:5000/api/reservas',
+      'http://localhost:5000/reservas'
+    ];
 
-      const labsLivres = listaArray.filter((rec) => {
-        const eLaboratorio = rec.ehLaboratorio == 1 || rec.ehLaboratorio === true;
-        const estaLivre = rec.status_atual && rec.status_atual.toString().trim().toLowerCase() === 'livre';
-        return eLaboratorio && estaLivre;
-      });
-
-      setRecursosDisponiveis(labsLivres);
-
-      if (labsLivres.length > 0) {
-        setForm((prev) => ({ ...prev, codigo_recurso: labsLivres[0].codigo }));
-      }
-    } catch (err) {
-      console.error('Erro ao buscar laboratórios livres:', err);
+    for (const url of urlsParaTestar) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const dados = await res.json();
+          const lista = Array.isArray(dados) ? dados : (dados.recordset || []);
+          setReservas(lista);
+          break;
+        }
+      } catch (e) {}
     }
   };
 
   useEffect(() => {
     setMontado(true);
-    carregarReservas();
     carregarRecursos();
+    carregarReservas();
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // FUNÇÃO QUE ESTAVA FALTANDO:
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensagem({ tipo: '', texto: '' });
     setCarregando(true);
 
     try {
-      const res = await fetch(`${API_URL}/reservas/criar`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
+      const urlsPost = [
+        'http://localhost:5000/api/reservas/criar',
+        'http://localhost:5000/reservas/criar'
+      ];
 
-      const dataText = await res.text();
+      let res = null;
+
+      for (const url of urlsPost) {
+        try {
+          const resposta = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form)
+          });
+          if (resposta.ok || resposta.status === 400 || resposta.status === 409) {
+            res = resposta;
+            break;
+          }
+        } catch (err) {}
+      }
+
+      if (!res) {
+        throw new Error('Servidor indisponível');
+      }
+
+      const txt = await res.text();
 
       if (!res.ok) {
-        setMensagem({ tipo: 'erro', texto: dataText || 'Erro ao cadastrar reserva.' });
+        setMensagem({ tipo: 'erro', texto: txt || 'Erro ao cadastrar reserva.' });
         return;
       }
 
@@ -100,8 +142,8 @@ export default function PaginaReservas() {
         status: 'Reservado'
       }));
 
-      carregarReservas();
       carregarRecursos();
+      carregarReservas();
     } catch (err) {
       setMensagem({ tipo: 'erro', texto: 'Erro de comunicação com o servidor backend.' });
     } finally {
@@ -144,15 +186,18 @@ export default function PaginaReservas() {
                 className={styles.select}
                 required
               >
-                {recursosDisponiveis.map((rec) => (
-                  <option key={rec.id} value={rec.codigo}>
-                    [{rec.codigo}] {rec.nome} — ({rec.ehLaboratorio ? 'Laboratório' : 'Sala'}) | Cap: {rec.capacidade}
-                  </option>
-                ))}
+                {recursosDisponiveis.map((rec) => {
+                  const ehLab = rec.ehLaboratorio == 1 || rec.ehLaboratorio === true;
+                  return (
+                    <option key={rec.id} value={rec.codigo}>
+                      [{rec.codigo}] {rec.nome} — ({ehLab ? 'Laboratório' : 'Sala'}) | Cap: {rec.capacidade}
+                    </option>
+                  );
+                })}
               </select>
             ) : (
-              <p style={{ color: '#ff6b6b', fontWeight: 'bold' }}>
-                Nenhum laboratório está com o status 'Livre' no momento.
+              <p style={{ color: '#ff6b6b', fontWeight: 'bold', marginTop: '8px' }}>
+                Nenhum recurso está marcado como 'Livre' na tabela no momento.
               </p>
             )}
           </div>
