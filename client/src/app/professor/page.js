@@ -94,7 +94,7 @@ export default function Home() {
         </div>
 
         <div className={styles.usuario}>
-          <h2>Cadastro de Usuário</h2>
+          <h2>Cadastro de Professores</h2>
           <form onSubmit={handleSubmit}>
             <div className={styles.campos}>
 
