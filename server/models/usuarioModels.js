@@ -1,20 +1,35 @@
-const { conectarBancoDeDados, sql } = require('../db');
-
 class UsuarioModel {
-  static async criarUsuario({ cpf, nome, dataNascimento, telefone, email, senhaHash }) {
-    const pool = await conectarBancoDeDados();
+  constructor(db) {
+    this._db = db;
+  }
 
-    await pool.request()
-      .input('cpf', sql.VarChar, cpf)
-      .input('nome', sql.VarChar, nome)
-      .input('dataniver', sql.Date, dataNascimento || null)
-      .input('cel', sql.VarChar, telefone || null)
-      .input('email', sql.VarChar, email)
-      .input('senha', sql.VarChar, senhaHash)
-      .query(`
-        INSERT INTO usuarios (cpf, nome, dataniver, cel, email, senha)
-        VALUES (@cpf, @nome, @dataniver, @cel, @email, @senha)
-      `);
+  // Método para cadastrar um novo usuário
+  criarUsuario(dadosUsuario) {
+    const { cpf, nome, dataNascimento, telefone, email, senhaHash } = dadosUsuario;
+
+    return new Promise((resolve, reject) => {
+      const dataNiverVal = dataNascimento ? "'" + dataNascimento + "'" : "NULL";
+      const celVal = telefone ? "'" + telefone + "'" : "NULL";
+
+      let sql = "INSERT INTO usuarios (cpf, nome, dataniver, cel, email, senha) VALUES (";
+      sql += "'" + cpf + "', ";
+      sql += "'" + nome + "', ";
+      sql += dataNiverVal + ", ";
+      sql += celVal + ", ";
+      sql += "'" + email + "', ";
+      sql += "'" + senhaHash + "')";
+
+      console.log("Comando INSERT de Usuário montado = " + sql);
+
+      this._db.query(sql, (erro) => {
+        if (erro) {
+          console.log("ERRO = " + erro);
+          return reject("Cadastro de novo Usuário FALHOU!");
+        }
+        console.log("Usuário cadastrado com SUCESSO!");
+        resolve();
+      });
+    });
   }
 }
 

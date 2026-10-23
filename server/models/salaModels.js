@@ -1,18 +1,31 @@
-const { conectarBancoDeDados, sql } = require('../db');
 class SalaModel {
-  static async criarSala({ nome, codigo, capacidade, localizacao }) {
-    const puxar = await conectarBancoDeDados();
+  constructor(db) {
+    this._db = db;
+  }
 
-    await puxar.request()
-      .input('nome', sql.VarChar, nome)
-      .input('codigo', sql.VarChar, codigo)
-      .input('capacidade', sql.Int, Number(capacidade))
-      .input('localizacao', sql.VarChar, localizacao)
-      .input('ehlaboratorio', sql.Bit, 0)
-      .query(`
-        INSERT INTO recursos (nome, codigo, capacidade, localizacao, ehlaboratorio)
-        VALUES (@nome, @codigo, @capacidade, @localizacao, 0)
-      `);
+  // Método para criar uma nova sala de aula na tabela de recursos
+  criarSala(dadosSala) {
+    const { nome, codigo, capacidade, localizacao } = dadosSala;
+
+    return new Promise((resolve, reject) => {
+      let sql = "INSERT INTO recursos (nome, codigo, capacidade, localizacao, ehLaboratorio) VALUES (";
+      sql += "'" + nome + "',";
+      sql += "'" + codigo + "',";
+      sql += Number(capacidade) + ",";
+      sql += "'" + localizacao + "',";
+      sql += "0)"; // 0 indica que ehLaboratorio = false (BIT)
+
+      console.log("Comando INSERT de Sala montado = " + sql);
+
+      this._db.query(sql, (erro) => {
+        if (erro) {
+          console.log("ERRO = " + erro);
+          return reject("Inclusão de nova Sala FALHOU!");
+        }
+        console.log("Sala cadastrada com SUCESSO!");
+        resolve();
+      });
+    });
   }
 }
 

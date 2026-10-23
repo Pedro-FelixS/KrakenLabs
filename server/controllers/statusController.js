@@ -1,30 +1,32 @@
-const StatusModel = require('../models/statusModel');
+const db = require('../db');
+const StatusModels = require('../models/statusModel');
+const statusModel = new StatusModels(db);
 
 class StatusController {
-  static async alterarStatus(req, res) {
-    const { recursoId, estado, observacao } = req.body;
+  static alterarStatus(req, res) {
+    const { recursoId, estado } = req.body;
 
     if (!recursoId || !estado) {
-      return res.status(400).send('Selecione o recurso (sala ou lab) e informe o novo estado!');
+      return res.status(400).send('ID do recurso e estado são obrigatórios.');
     }
 
-    try {
-      await StatusModel.atualizarStatusRecurso({ recursoId, estado, observacao });
-      return res.status(200).send('Status da sala ou laboratório atualizado com sucesso!');
-    } catch (erro) {
-      console.error('Erro ao atualizar status do recurso:', erro);
-      return res.status(500).send('Não foi possível alterar o status da sala ou laboratório.');
-    }
+    statusModel.atualizarStatusRecurso(req.body)
+      .then(() => {
+        return res.status(200).send('Status do recurso atualizado com sucesso!');
+      })
+      .catch((erro) => {
+        return res.status(500).send(erro);
+      });
   }
 
-  static async listarStatus(req, res) {
-    try {
-      const recursos = await StatusModel.listarStatusRecursos();
-      return res.status(200).json(recursos);
-    } catch (erro) {
-      console.error('Erro ao buscar status dos recursos:', erro);
-      return res.status(500).send('Erro ao buscar a lista de status.');
-    }
+  static listarStatus(req, res) {
+    statusModel.listarStatusRecursos()
+      .then((recordset) => {
+        return res.status(200).json(recordset);
+      })
+      .catch((erro) => {
+        return res.status(500).send(erro);
+      });
   }
 }
 
