@@ -24,7 +24,7 @@ export default function PaginaReservas() {
 
   const carregarReservas = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/status_recursos`);
+      const res = await fetch('http://localhost:5000/reservas/');
       if (!res.ok) throw new Error('Falha ao obter lista de reservas');
       const dados = await res.json();
       if (Array.isArray(dados)) {
@@ -120,7 +120,7 @@ export default function PaginaReservas() {
     <div className={styles.page}>
       <div className={styles.main}>
         <h1>KrakenLabs</h1>
-        <h2 className={styles.subtitulo}>Reserva de Recursos</h2>
+        <h2 className={styles.subtitulo}>reserva de recursos</h2>
 
         {mensagem.texto && (
           <div className={mensagem.tipo === 'erro' ? styles.alertaErro : styles.alertaSucesso}>
@@ -229,28 +229,6 @@ export default function PaginaReservas() {
             {carregando ? 'Cadastrating...' : 'Cadastrar Reserva'}
           </button>
         </form>
-
-        <h2 className={styles.subtitulo}>Reservas Existentes</h2>
-        {reservas.length === 0 ? (
-          <p style={{ color: '#b7d4df' }}>Nenhuma reserva encontrada no momento.</p>
-        ) : (
-          <ul className={styles.listaReservas}>
-            {reservas.map((r) => (
-              <li key={r.id} className={styles.reservaItem}>
-                <div className={styles.reservaInfo}>
-                  <strong>Recurso: {r.codigo_recurso}</strong> — Por <b>{r.usuario_nome}</b>
-                  <br />
-                  <small>
-                    Período: {r.data_inicio} até {r.data_fim} | Horário: {r.hora_inicio} às {r.hora_fim}
-                  </small>
-                </div>
-                <span className={getBadgeClass(r.status)}>
-                  {r.status}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
 
         <br />
         <Link href="/paginaPrincipal" className={styles.botao}>

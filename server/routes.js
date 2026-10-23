@@ -47,6 +47,6 @@ routes.use(usuarioRoutes);
 routes.use(salasRoutes);
 routes.use(labsRoutes);
 routes.use(statusRoutes);
-routes.use(reservaRoutes);
+routes.use('/reservas', reservaRoutes);
 
 module.exports = routes;

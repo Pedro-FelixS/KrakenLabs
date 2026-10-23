@@ -1,40 +1,126 @@
-const db = require('../db'); 
+
+const { conectarBancoDeDados, sql } = require('../db');
 
 const ReservaModel = {
+
   buscarRecursos: async () => {
-    const result = await db.query("SELECT * FROM recursos ORDER BY nome");
-    return result.recordset || result || [];
-  },
+    const pool = await conectarBancoDeDados();
 
-  getAll: async () => {
-    const result = await db.query('SELECT * FROM Reservas ORDER BY data_inicio DESC, hora_inicio DESC');
-    return result.recordset || result || [];
-  },
-
-  verificarDisponibilidade: async (codigo_recurso, data_inicio, data_fim, hora_inicio, hora_fim) => {
-    const result = await db.query(`
-      SELECT * FROM Reservas 
-      WHERE codigo_recurso = '${codigo_recurso}'
-        AND status IN ('Reservado', 'Ocupado', 'Bloqueado')
-        AND (data_inicio <= '${data_fim}' AND data_fim >= '${data_inicio}')
-        AND (
-          ('${hora_inicio}' >= hora_inicio AND '${hora_inicio}' < hora_fim) OR
-          ('${hora_fim}' > hora_inicio AND '${hora_fim}' <= hora_fim) OR
-          (hora_inicio >= '${hora_inicio}' AND hora_fim <= '${hora_fim}')
-        )
+    const resultado = await pool.request().query(`
+      SELECT *
+      FROM recursos
+      ORDER BY nome
     `);
-    return result.recordset || result || [];
+
+    return resultado.recordset;
+  },
+
+  async getAll() {
+  const pool = await conectarBancoDeDados();
+
+  const resultado = await pool.request().query(`
+    SELECT
+      DB_NAME() AS banco_atual,
+      COUNT(*) AS total_reservas
+    FROM Reservas
+  `);
+
+  console.log('Teste do banco:', resultado.recordset);
+
+  const reservas = await pool.request().query(`
+    SELECT *
+    FROM Reservas
+    ORDER BY data_inicio DESC, hora_inicio DESC
+  `);
+
+  console.log('Reservas encontradas:', reservas.recordset.length);
+
+  return reservas.recordset;
+},
+
+  verificarDisponibilidade: async (
+    codigo_recurso,
+    data_inicio,
+    data_fim,
+    hora_inicio,
+    hora_fim
+  ) => {
+    const pool = await conectarBancoDeDados();
+
+    const resultado = await pool.request()
+      .input('codigo', sql.VarChar(20), codigo_recurso)
+      .input('dataInicio', sql.Date, data_inicio)
+      .input('dataFim', sql.Date, data_fim)
+      .input('horaInicio', sql.Time, hora_inicio)
+      .input('horaFim', sql.Time, hora_fim)
+      .query(`
+        SELECT *
+        FROM Reservas
+        WHERE codigo_recurso = @codigo
+          AND status IN ('Reservado', 'Ocupado', 'Bloqueado')
+          AND DATEADD(
+            SECOND,
+            DATEDIFF(SECOND, CAST('00:00:00' AS TIME), hora_inicio),
+            CAST(data_inicio AS DATETIME2)
+          ) < DATEADD(
+            SECOND,
+            DATEDIFF(SECOND, CAST('00:00:00' AS TIME), @horaFim),
+            CAST(@dataFim AS DATETIME2)
+          )
+          AND DATEADD(
+            SECOND,
+            DATEDIFF(SECOND, CAST('00:00:00' AS TIME), hora_fim),
+            CAST(data_fim AS DATETIME2)
+          ) > DATEADD(
+            SECOND,
+            DATEDIFF(SECOND, CAST('00:00:00' AS TIME), @horaInicio),
+            CAST(@dataInicio AS DATETIME2)
+          )
+      `);
+
+    return resultado.recordset;
   },
 
   create: async (dados) => {
-    const { codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status } = dados;
-    const statusFinal = status || 'Reservado';
+    const pool = await conectarBancoDeDados();
 
-    await db.query(`
-      INSERT INTO Reservas (codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status)
-      VALUES ('${codigo_recurso}', '${usuario_nome}', '${data_inicio}', '${data_fim}', '${hora_inicio}', '${hora_fim}', '${statusFinal}')
-    `);
-    return { message: 'Reserva cadastrada com sucesso!' };
+    const {
+      codigo_recurso,
+      usuario_nome,
+      data_inicio,
+      data_fim,
+      hora_inicio,
+      hora_fim
+    } = dados;
+
+    const resultado = await pool.request()
+      .input('codigo', sql.VarChar(20), codigo_recurso)
+      .input('usuario', sql.VarChar(100), usuario_nome)
+      .input('dataInicio', sql.Date, data_inicio)
+      .input('dataFim', sql.Date, data_fim)
+      .input('horaInicio', sql.Time, hora_inicio)
+      .input('horaFim', sql.Time, hora_fim)
+      .query(`
+        INSERT INTO Reservas (
+          codigo_recurso,
+          usuario_nome,
+          data_inicio,
+          data_fim,
+          hora_inicio,
+          hora_fim
+        )
+        OUTPUT INSERTED.*
+        VALUES (
+          @codigo,
+          @usuario,
+          @dataInicio,
+          @dataFim,
+          @horaInicio,
+          @horaFim
+        )
+      `);
+
+    return resultado.recordset[0];
   }
 };
 
