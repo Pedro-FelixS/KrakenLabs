@@ -1,19 +1,31 @@
-const { conectarBancoDeDados, sql } = require('../db');
-
 class LabModel {
-  static async criarLab({ nome, codigo, capacidade, localizacao }) {
-    const puxar = await conectarBancoDeDados();
+  constructor(db) {
+    this._db = db;
+  }
 
-    await puxar.request()
-      .input('nome', sql.VarChar, nome)
-      .input('codigo', sql.VarChar, codigo)
-      .input('capacidade', sql.Int, Number(capacidade))
-      .input('localizacao', sql.VarChar, localizacao)
-      .input('ehlaboratorio', sql.Bit, 1)
-      .query(`
-        INSERT INTO recursos (nome, codigo, capacidade, localizacao, ehlaboratorio)
-        VALUES (@nome, @codigo, @capacidade, @localizacao, 1)
-      `);
+  // Método para criar um novo laboratório na tabela de recursos
+  criarLab(dadosLab) {
+    const { nome, codigo, capacidade, localizacao } = dadosLab;
+
+    return new Promise((resolve, reject) => {
+      let sql = "INSERT INTO recursos (nome, codigo, capacidade, localizacao, ehLaboratorio) VALUES (";
+      sql += "'" + nome + "',";
+      sql += "'" + codigo + "',";
+      sql += Number(capacidade) + ",";
+      sql += "'" + localizacao + "',";
+      sql += "1)"; // 1 indica que ehLaboratorio = true (BIT)
+
+      console.log("Comando INSERT de Laboratório montado = " + sql);
+
+      this._db.query(sql, (erro) => {
+        if (erro) {
+          console.log("ERRO = " + erro);
+          return reject("Inclusão de novo Laboratório FALHOU!");
+        }
+        console.log("Laboratório cadastrado com SUCESSO!");
+        resolve();
+      });
+    });
   }
 }
 

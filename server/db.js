@@ -15,21 +15,41 @@ const config = {
   }
 };
 
-let poolPromise;
+let poolPromise = null;
 
-async function conectarBancoDeDados() {
-  try {
-    if (!poolPromise) {
-      poolPromise = sql.connect(config);
-    }
-    const pool = await poolPromise;
-    console.log('Conectado ao SQL Server (Regulus) com sucesso!');
-    return pool;
-  } catch (erro) {
-    poolPromise = null; // Reseta em caso de falha para tentar novamente se necessário
-    console.error('Falha na conexão com o SQL Server:', erro.message);
-    throw erro;
+// Garante que o pool de conexão seja reutilizado
+function obterPool() {
+  if (!poolPromise) {
+    poolPromise = sql.connect(config).catch((erro) => {
+      poolPromise = null; // Reseta em caso de falha de conexão
+      console.error('Falha na conexão com o SQL Server:', erro.message);
+      throw erro;
+    });
   }
+  return poolPromise;
 }
 
-module.exports = { conectarBancoDeDados, sql };
+// Objeto de banco de dados compatível com o constructor da classe (this._db.query)
+const db = {
+  query: function (sqlQuery, callback) {
+    obterPool()
+      .then((pool) => {
+        return pool.request().query(sqlQuery);
+      })
+      .then((resultado) => {
+        // Sucesso: passa null no erro e o recordset no resultado
+        if (typeof callback === 'function') {
+          callback(null, resultado.recordset);
+        }
+      })
+      .catch((erro) => {
+        // Falha: passa o objeto de erro para o callback
+        console.error('Erro ao executar query no SQL Server:', erro.message);
+        if (typeof callback === 'function') {
+          callback(erro, null);
+        }
+      });
+  }
+};
+
+module.exports = db;

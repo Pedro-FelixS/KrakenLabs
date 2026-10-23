@@ -1,25 +1,23 @@
+const db = require('../db');
 const LabModel = require('../models/labsModels');
+const labModel = new LabModel(db);
 
 class LabController {
-  static async cadastrar(req, res) {
+  // Renomeado para cadastrar
+  static cadastrar(req, res) {
     const { nome, codigo, capacidade, localizacao } = req.body;
 
     if (!nome || !codigo || !capacidade || !localizacao) {
-      return res.status(400).send("Preencha os campos adequadamente!");
+      return res.status(400).send('Todos os campos são obrigatórios.');
     }
 
-    try {
-      await LabModel.criarLab({ nome, codigo, capacidade, localizacao });
-      return res.status(201).send('laboratório cadastrado com sucesso!');
-    } catch (erro) {
-      console.error('Erro no cadastro de recurso:', erro);
-
-      if (erro.number === 2627 || erro.number === 2601) {
-        return res.status(400).send('Já existe um recurso cadastrado com este código.');
-      }
-
-      return res.status(500).send("Não foi possível cadastrar o laboratório ou sala.");
-    }
+    labModel.criarLab(req.body)
+      .then(() => {
+        return res.status(201).send('Laboratório cadastrado com sucesso!');
+      })
+      .catch((erro) => {
+        return res.status(500).send(erro);
+      });
   }
 }
 
