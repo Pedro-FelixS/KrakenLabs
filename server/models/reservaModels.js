@@ -1,4 +1,5 @@
 const { conectarBancoDeDados, sql } = require('../db');
+
 class ReservaModel {
   // 1. Busca todos os recursos
   static async buscarRecursos() {
@@ -19,7 +20,7 @@ class ReservaModel {
   }
 
   // 2. Busca o histórico de reservas
-    static async getAll() {
+  static async getAll() {
     const pool = await conectarBancoDeDados();
     const resultado = await pool.request().query(`
       SELECT id, codigo_recurso, usuario_nome, data_inicio, data_fim, hora_inicio, hora_fim, status
