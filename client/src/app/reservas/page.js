@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './reserva.module.css';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
 export default function PaginaReservas() {
+  const [montado, setMontado] = useState(false);
   const [reservas, setReservas] = useState([]);
   const [recursosDisponiveis, setRecursosDisponiveis] = useState([]);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
@@ -22,6 +21,7 @@ export default function PaginaReservas() {
     status: 'Reservado'
   });
 
+<<<<<<< HEAD
   const carregarReservas = async () => {
     try {
       const res = await fetch('http://localhost:5000/reservas/');
@@ -29,42 +29,77 @@ export default function PaginaReservas() {
       const dados = await res.json();
       if (Array.isArray(dados)) {
         setReservas(dados);
+=======
+  // Busca recursos livres na tabela 'recursos'
+  const carregarRecursos = async () => {
+    const urlsParaTestar = [
+      'http://localhost:5000/api/reservas/recursos',
+      'http://localhost:5000/reservas/recursos'
+    ];
+
+    let dados = null;
+
+    for (const url of urlsParaTestar) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          dados = await res.json();
+          break;
+        }
+      } catch (e) {
+        // Tenta a próxima URL no loop
+>>>>>>> 867e14e444dfbff7c3abb1d084ee251235637671
       }
-    } catch (err) {
-      console.error('Erro ao buscar reservas:', err);
+    }
+
+    if (!dados) {
+      console.error('Erro ao conectar com o backend para buscar recursos.');
+      return;
+    }
+
+    const listaArray = Array.isArray(dados) ? dados : (dados.recordset || []);
+
+    // Filtra apenas os recursos cujo status_atual seja 'Livre'
+    const livres = listaArray.filter((rec) => {
+      const status = rec.status_atual ? rec.status_atual.toString().trim().toLowerCase() : '';
+      return status === 'livre';
+    });
+
+    setRecursosDisponiveis(livres);
+
+    if (livres.length > 0) {
+      setForm((prev) => ({ ...prev, codigo_recurso: livres[0].codigo }));
     }
   };
 
-  const carregarRecursos = async () => {
-    try {
-      const res = await fetch(`http://localhost:5000/reservas/recursos`);
-      if (!res.ok) throw new Error('Falha ao obter lista de recursos');
-      const dados = await res.json();
-      
-      if (Array.isArray(dados)) {
-        // Filtra apenas os recursos onde status_atual é 'Livre'
-        const livres = dados.filter(
-          (rec) => rec.status_atual && rec.status_atual.toString().trim().toLowerCase() === 'livre'
-        );
+  // Busca o histórico de reservas
+  const carregarReservas = async () => {
+    const urlsParaTestar = [
+      'http://localhost:5000/api/reservas',
+      'http://localhost:5000/reservas'
+    ];
 
-        setRecursosDisponiveis(livres);
-
-        if (livres.length > 0) {
-          setForm((prev) => ({ ...prev, codigo_recurso: livres[0].codigo }));
+    for (const url of urlsParaTestar) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const dados = await res.json();
+          const lista = Array.isArray(dados) ? dados : (dados.recordset || []);
+          setReservas(lista);
+          break;
         }
-      }
-    } catch (err) {
-      console.error('Erro ao buscar recursos livres:', err);
+      } catch (e) {}
     }
   };
 
   useEffect(() => {
-    carregarReservas();
+    setMontado(true);
     carregarRecursos();
+    carregarReservas();
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -73,16 +108,35 @@ export default function PaginaReservas() {
     setCarregando(true);
 
     try {
-      const res = await fetch(`${API_URL}/reservas/criar`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
+      const urlsPost = [
+        'http://localhost:5000/api/reservas/criar',
+        'http://localhost:5000/reservas/criar'
+      ];
 
-      const data = await res.json();
+      let res = null;
+
+      for (const url of urlsPost) {
+        try {
+          const resposta = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form)
+          });
+          if (resposta.ok || resposta.status === 400 || resposta.status === 409) {
+            res = resposta;
+            break;
+          }
+        } catch (err) {}
+      }
+
+      if (!res) {
+        throw new Error('Servidor indisponível');
+      }
+
+      const txt = await res.text();
 
       if (!res.ok) {
-        setMensagem({ tipo: 'erro', texto: data.error || 'Erro ao cadastrar reserva.' });
+        setMensagem({ tipo: 'erro', texto: txt || 'Erro ao cadastrar reserva.' });
         return;
       }
 
@@ -98,8 +152,8 @@ export default function PaginaReservas() {
         status: 'Reservado'
       }));
 
-      carregarReservas();
       carregarRecursos();
+      carregarReservas();
     } catch (err) {
       setMensagem({ tipo: 'erro', texto: 'Erro de comunicação com o servidor backend.' });
     } finally {
@@ -115,6 +169,8 @@ export default function PaginaReservas() {
       default: return `${styles.badge} ${styles.statusLivre}`;
     }
   };
+
+  if (!montado) return null;
 
   return (
     <div className={styles.page}>
@@ -140,15 +196,18 @@ export default function PaginaReservas() {
                 className={styles.select}
                 required
               >
-                {recursosDisponiveis.map((rec) => (
-                  <option key={rec.id} value={rec.codigo}>
-                    [{rec.codigo}] {rec.nome} — ({rec.ehLaboratorio ? 'Laboratório' : 'Sala'}) | Cap: {rec.capacidade}
-                  </option>
-                ))}
+                {recursosDisponiveis.map((rec) => {
+                  const ehLab = rec.ehLaboratorio == 1 || rec.ehLaboratorio === true;
+                  return (
+                    <option key={rec.id} value={rec.codigo}>
+                      [{rec.codigo}] {rec.nome} — ({ehLab ? 'Laboratório' : 'Sala'}) | Cap: {rec.capacidade}
+                    </option>
+                  );
+                })}
               </select>
             ) : (
-              <p style={{ color: '#ff6b6b', fontWeight: 'bold' }}>
-                Nenhum recurso está com o status 'Livre' no momento.
+              <p style={{ color: '#ff6b6b', fontWeight: 'bold', marginTop: '8px' }}>
+                Nenhum recurso está marcado como 'Livre' na tabela no momento.
               </p>
             )}
           </div>
@@ -178,6 +237,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
             <div className={styles.campoGroup}>
@@ -190,6 +250,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -205,6 +266,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
             <div className={styles.campoGroup}>
@@ -217,6 +279,7 @@ export default function PaginaReservas() {
                 onChange={handleChange} 
                 required 
                 className={styles.input}
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -226,7 +289,7 @@ export default function PaginaReservas() {
             disabled={carregando || recursosDisponiveis.length === 0}
             className={styles.botao}
           >
-            {carregando ? 'Cadastrating...' : 'Cadastrar Reserva'}
+            {carregando ? 'Cadastrando...' : 'Cadastrar Reserva'}
           </button>
         </form>
 
@@ -236,10 +299,10 @@ export default function PaginaReservas() {
         </Link>
       </div>
 
-      <span className={styles.rodape}>
+      <footer className={styles.rodape}>
         KrakenLabs <br />
         &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
-      </span>
+      </footer>
     </div>
   );
 }

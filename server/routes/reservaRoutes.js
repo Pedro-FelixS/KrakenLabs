@@ -6,7 +6,7 @@ const ReservaController = require('../controllers/reservaController');
 
 router.get('/recursos', ReservaController.listarRecursos);
 
-router.get('/', ReservaController.listarReservas);
+router.get('/status', ReservaController.listarReservas);
 
 router.post('/criar', ReservaController.criarReserva);
 
