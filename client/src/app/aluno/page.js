@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import styles from './page.module.css';
+import styles from './aluno.module.css';
 
 const ESTADO_INICIAL = {
   nome: '',
@@ -94,7 +94,7 @@ export default function Home() {
         </div>
 
         <div className={styles.usuario}>
-          <h2>Cadastro de Usuário</h2>
+          <h2>Cadastro de Alunos</h2>
           <form onSubmit={handleSubmit}>
             <div className={styles.campos}>
 

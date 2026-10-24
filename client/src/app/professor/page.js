@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import styles from './page.module.css';
+import styles from './professor.module.css';
 
 const ESTADO_INICIAL = {
   nome: '',
