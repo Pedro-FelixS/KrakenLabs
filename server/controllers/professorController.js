@@ -1,8 +1,8 @@
 const db = require('../db');
-const UsuarioModel = require('../models/usuarioModels');
-const usuarioModel = new UsuarioModel(db);
+const ProfessorModel = require('../models/professorModels');
+const professorModel = new ProfessorModel(db);
 
-class UsuarioController {
+class ProfessorController {
   static criar(req, res) {
     const { cpf, nome, email, senhaHash } = req.body;
 
@@ -10,9 +10,9 @@ class UsuarioController {
       return res.status(400).send('CPF, nome, e-mail e senha são obrigatórios.');
     }
 
-    usuarioModel.criarUsuario(req.body)
+    professorModel.criarProfessor(req.body)
       .then(() => {
-        return res.status(201).send('Usuário cadastrado com sucesso!');
+        return res.status(201).send('Professor cadastrado com sucesso!');
       })
       .catch((erro) => {
         return res.status(500).send(erro);
@@ -20,4 +20,4 @@ class UsuarioController {
   }
 }
 
-module.exports = UsuarioController;
+module.exports = ProfessorController;

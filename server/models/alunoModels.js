@@ -1,4 +1,4 @@
-class UsuarioModel {
+class AlunoModel {
   constructor(db) {
     this._db = db;
   }
@@ -18,8 +18,9 @@ class UsuarioModel {
       sql += celVal + ", ";
       sql += "'" + email + "', ";
       sql += "'" + senhaHash + "')";
+      sql += "0)";
 
-      console.log("Comando INSERT de Usuário montado = " + sql);
+      console.log("Comando INSERT de Aluno montado = " + sql);
 
       this._db.query(sql, (erro) => {
         if (erro) {
@@ -33,4 +34,4 @@ class UsuarioModel {
   }
 }
 
-module.exports = UsuarioModel;
+module.exports = AlunoModel;

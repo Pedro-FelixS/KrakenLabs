@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 
 const routes = express.Router();
 
-const usuarioRoutes = require('./routes/usuarioRoutes');
+const professorRoutes = require('./routes/professorRoutes');
+const alunoRoutes = require('./routes/alunoRoutes');
 const salasRoutes = require('./routes/salaRoutes');
 const labsRoutes = require('./routes/labsRoutes');
 const statusRoutes = require('./routes/statusRoutes');
@@ -43,7 +44,8 @@ routes.post('/login', async(req, res) => {
     }
 });
 
-routes.use(usuarioRoutes);
+routes.use(professorRoutes);
+routes.use(alunoRoutes);
 routes.use(salasRoutes);
 routes.use(labsRoutes);
 routes.use(statusRoutes);
