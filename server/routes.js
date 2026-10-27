@@ -10,7 +10,6 @@ const salasRoutes = require('./routes/salaRoutes');
 const labsRoutes = require('./routes/labsRoutes');
 const statusRoutes = require('./routes/statusRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
-const consultaRoutes = require('./routes/consultaRoutes');
 
 routes.post('/login', async(req, res) => {
    const { email, senha } = req.body;
@@ -51,6 +50,5 @@ routes.use(salasRoutes);
 routes.use(labsRoutes);
 routes.use(statusRoutes);
 routes.use('/reservas', reservaRoutes);
-routes.use(consultaRoutes);
 
 module.exports = routes;
