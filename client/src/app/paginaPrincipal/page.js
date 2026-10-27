@@ -37,6 +37,12 @@ export default function PaginaPrincipal() {
         <Link href="/reservas" className={styles.botao}>
           Reservar Recursos
         </Link>
+
+        <br/>
+        <br/>
+        <Link href="/consultaReserva" className={styles.botao}>
+          Consultar as reservas
+        </Link>
         </div>
         <span className={styles.rodape}>
         KrakenLabs <br />

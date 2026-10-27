@@ -9,31 +9,34 @@ class ConsultaModel {
       nomeRecurso,
       dataInicio,
       dataFim,
-      data,
       hora,
       usuario,
       status
     } = filtros;
 
-    // Base da Query unindo Reservas, Recurso e Usuário
+    // A consulta parte da tabela 'recursos' para garantir que salas/labs apareçam
     let sql = `
       SELECT 
-        res.id AS reserva_id,
-        rec.codigo AS recurso_codigo,
+        rec.id AS recurso_id,
+        rec.codigo AS codigo_recurso,
         rec.nome AS recurso_nome,
-        u.nome AS usuario_nome,
-        u.email AS usuario_email,
-        res.data_reserva,
+        rec.capacidade,
+        rec.localizacao,
+        rec.ehLaboratorio,
+        rec.status_atual,
+        res.id AS reserva_id,
+        res.usuario_nome,
+        res.data_inicio,
+        res.data_fim,
         res.hora_inicio,
         res.hora_fim,
-        res.status
-      FROM reservas res
-      INNER JOIN recursos rec ON res.recurso_id = rec.id
-      INNER JOIN usuarios u ON res.usuario_cpf = u.cpf
+        ISNULL(res.status, rec.status_atual) AS status
+      FROM recursos rec
+      LEFT JOIN Reservas res ON rec.codigo = res.codigo_recurso
       WHERE 1=1
     `;
 
-    // Filtros dinâmicos adicionados apenas se fornecidos
+    // Filtros aplicados na tabela de recursos ou na de reservas
     if (codigoRecurso) {
       sql += ` AND rec.codigo LIKE '%${codigoRecurso}%'`;
     }
@@ -42,33 +45,30 @@ class ConsultaModel {
       sql += ` AND rec.nome LIKE '%${nomeRecurso}%'`;
     }
 
-    // Período de datas ou Data exata
     if (dataInicio && dataFim) {
-      sql += ` AND res.data_reserva BETWEEN '${dataInicio}' AND '${dataFim}'`;
-    } else if (data) {
-      sql += ` AND res.data_reserva = '${data}'`;
+      sql += ` AND (res.data_inicio <= '${dataFim}' AND res.data_fim >= '${dataInicio}')`;
+    } else if (dataInicio) {
+      sql += ` AND (res.data_fim >= '${dataInicio}' OR res.data_fim IS NULL)`;
+    } else if (dataFim) {
+      sql += ` AND (res.data_inicio <= '${dataFim}' OR res.data_inicio IS NULL)`;
     }
 
-    // Horário da reserva
     if (hora) {
-      sql += ` AND '${hora}' BETWEEN res.hora_inicio AND res.hora_fim`;
+      sql += ` AND ('${hora}' BETWEEN res.hora_inicio AND res.hora_fim OR res.hora_inicio IS NULL)`;
     }
 
-    // Usuário (pode buscar por nome, email ou CPF)
     if (usuario) {
-      sql += ` AND (u.nome LIKE '%${usuario}%' OR u.email LIKE '%${usuario}%' OR u.cpf = '${usuario}')`;
+      sql += ` AND res.usuario_nome LIKE '%${usuario}%'`;
     }
 
-    // Status da reserva (ex: 'Ativa', 'Cancelada', 'Concluída')
     if (status) {
-      sql += ` AND res.status = '${status}'`;
+      sql += ` AND (res.status = '${status}' OR rec.status_atual = '${status}')`;
     }
 
-    sql += ` ORDER BY res.data_reserva DESC, res.hora_inicio ASC`;
+    sql += ` ORDER BY rec.codigo ASC, res.data_inicio DESC`;
 
     console.log("SQL de Consulta montado =", sql);
 
-    // Retorna a Promise nativa do db.query
     return this._db.query(sql);
   }
 }
