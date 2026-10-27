@@ -1,0 +1,209 @@
+.pageConsulta {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  background: linear-gradient(
+    to bottom,
+    #020b12,
+    #041824,
+    #0a2a3a,
+    #10384d,
+    #0b2230
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.mainConsulta {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+
+.mainConsulta h1 {
+  margin: 0 0 20px 0;
+  font-size: 42px;
+  text-shadow: 0 0 10px #0aabbd;
+  font-family: "Caesar Dressing", system-ui, Arial;
+  text-align: center;
+}
+
+
+.cardFiltros {
+  width: 100%;
+  background: rgba(10, 42, 58, 0.7);
+  border: 1px solid rgba(10, 171, 189, 0.3);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+.gridFiltros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.campoFiltro {
+  display: flex;
+  flex-direction: column;
+}
+
+.campoFiltro label {
+  color: #b7d4df;
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.campoFiltro input,
+.campoFiltro select {
+  background-color: #041824;
+  color: white;
+  border: 1px solid #10384d;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campoFiltro input:focus,
+.campoFiltro select:focus {
+  border-color: #0aabbd;
+  box-shadow: 0 0 8px rgba(10, 171, 189, 0.4);
+}
+
+
+.acoesFiltros {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.botao {
+  background-color: #0a2a3a;
+  color: white;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.botao:hover {
+  background-color: #10384d;
+}
+
+.botaoSecundario {
+  background-color: transparent;
+  color: #b7d4df;
+  border: 1px solid #10384d;
+}
+
+.botaoSecundario:hover {
+  background-color: rgba(16, 56, 77, 0.5);
+  color: white;
+}
+
+
+.tabelaContainer {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(10, 171, 189, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.tabelaReservas {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background-color: rgba(4, 24, 36, 0.85);
+}
+
+.tabelaReservas th {
+  background-color: #0a2a3a;
+  color: #0aabbd;
+  padding: 14px;
+  font-size: 15px;
+  border-bottom: 2px solid #10384d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabelaReservas td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(16, 56, 77, 0.5);
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.tabelaReservas tr:hover {
+  background-color: rgba(16, 56, 77, 0.4);
+}
+
+
+.badgeStatus {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+}
+
+.statusAtiva {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #2ecc71;
+  border: 1px solid #28a745;
+}
+
+.statusCancelada {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #e74c3c;
+  border: 1px solid #dc3545;
+}
+
+.statusConcluida {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: #bdc3c7;
+  border: 1px solid #6c757d;
+}
+
+
+.mensagemStatus {
+  margin: 20px 0;
+  color: #b7d4df;
+  font-size: 16px;
+  text-align: center;
+}
+
+.mensagemErro {
+  color: #ff6b6b;
+  text-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+}
+
+/* Rodapé */
+.rodape {
+  text-align: center;
+  padding: 20px;
+  color: #c2c2c2;
+  font-size: 14px;
+}
