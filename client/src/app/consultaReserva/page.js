@@ -1,10 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './consulta.module.css';
 
-const ConsultaReservas = () => {
+export default function ConsultaReservas() {
+  const [montado, setMontado] = useState(false);
+  const [reservas, setReservas] = useState([]);
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState('');
+
   const [filtros, setFiltros] = useState({
     codigoRecurso: '',
     nomeRecurso: '',
@@ -14,15 +19,6 @@ const ConsultaReservas = () => {
     usuario: '',
     status: ''
   });
-
-  const [reservas, setReservas] = useState([]);
-  const [carregando, setCarregando] = useState(false);
-  const [erro, setErro] = useState('');
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFiltros((prev) => ({ ...prev, [name]: value }));
-  };
 
   const buscarReservas = async () => {
     setCarregando(true);
@@ -37,29 +33,43 @@ const ConsultaReservas = () => {
 
     const queryString = params.toString() ? `?${params.toString()}` : '';
 
-    try {
-      const res = await fetch(`http://localhost:5000/consultar${queryString}`);
+    // Utiliza o mesmo padrão de Fallback de URLs da tela de Cadastro
+    const urlsParaTestar = [
+      `http://localhost:5000/consultar${queryString}`,
+      `http://localhost:5000/api/reservas/consultar${queryString}`,
+      `http://localhost:5000/reservas/consultar${queryString}`
+    ];
 
-      if (!res.ok) {
-        throw new Error(`Servidor respondeu com status ${res.status}`);
-      }
+    let dados = null;
 
-      const dados = await res.json();
-      
-      // Trata array vindo direto ou envolto em objeto recordset
+    for (const url of urlsParaTestar) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          dados = await res.json();
+          break;
+        }
+      } catch (e) {}
+    }
+
+    if (dados) {
       const lista = Array.isArray(dados) ? dados : (dados.recordset || []);
       setReservas(lista);
-    } catch (err) {
-      console.error('Erro na consulta:', err);
-      setErro('Erro ao buscar reservas. Verifique a conexão com o servidor.');
-    } finally {
-      setCarregando(false);
+    } else {
+      setErro('Não foi possível conectar com o servidor backend.');
     }
+
+    setCarregando(false);
   };
 
   useEffect(() => {
+    setMontado(true);
     buscarReservas();
   }, []);
+
+  const handleChange = (e) => {
+    setFiltros((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,45 +86,26 @@ const ConsultaReservas = () => {
       usuario: '',
       status: ''
     });
-    
-    // Dispara a busca sem nenhum filtro
-    setTimeout(() => {
-      buscarReservas();
-    }, 50);
-  };
-
-  const getBadgeClass = (status) => {
-    const statusNormalizado = status ? status.toString().trim() : '';
-    switch (statusNormalizado) {
-      case 'Bloqueado': 
-      case 'Ocupado': return `${styles.badgeStatus} ${styles.statusCancelada}`;
-      case 'Reservado': 
-      case 'Ativa': return `${styles.badgeStatus} ${styles.statusAtiva}`;
-      default: return `${styles.badgeStatus} ${styles.statusConcluida}`;
-    }
+    setTimeout(() => buscarReservas(), 50);
   };
 
   const formatarData = (dataStr) => {
     if (!dataStr) return '-';
-    // Trata datas vindas no formato ISO do SQL Server (Ex: 2026-10-22T00:00:00.000Z)
     const parteData = dataStr.split('T')[0];
     const partes = parteData.split('-');
-    if (partes.length === 3) {
-      return `${partes[2]}/${partes[1]}/${partes[0]}`;
-    }
-    return dataStr;
+    return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : dataStr;
   };
+
+  if (!montado) return null;
 
   return (
     <div className={styles.pageConsulta}>
       <main className={styles.mainConsulta}>
         <h1>KrakenLabs</h1>
-        <h2 style={{ color: '#b7d4df', marginBottom: '20px' }}>Consulta de Reservas</h2>
+        <h2 className={styles.subtitulo}>Consulta de Recursos e Reservas</h2>
 
-        {/* Formulário de Filtros */}
         <form onSubmit={handleSubmit} className={styles.cardFiltros}>
           <div className={styles.gridFiltros}>
-            
             <div className={styles.campoFiltro}>
               <label htmlFor="codigoRecurso">Código do Recurso:</label>
               <input
@@ -135,7 +126,7 @@ const ConsultaReservas = () => {
                 name="nomeRecurso"
                 value={filtros.nomeRecurso}
                 onChange={handleChange}
-                placeholder="Ex: Laboratório de Redes"
+                placeholder="Ex: Laboratório"
               />
             </div>
 
@@ -183,7 +174,7 @@ const ConsultaReservas = () => {
                 name="usuario"
                 value={filtros.usuario}
                 onChange={handleChange}
-                placeholder="Ex: João Silva"
+                placeholder="Ex: Henrique"
               />
             </div>
 
@@ -196,35 +187,27 @@ const ConsultaReservas = () => {
                 onChange={handleChange}
               >
                 <option value="">Todos</option>
+                <option value="Livre">Livre</option>
                 <option value="Reservado">Reservado</option>
                 <option value="Ocupado">Ocupado</option>
                 <option value="Bloqueado">Bloqueado</option>
               </select>
             </div>
-
           </div>
 
           <div className={styles.acoesFiltros}>
-            <button type="submit" className={styles.botao}>
-              Filtrar
-            </button>
-            <button 
-              type="button" 
-              onClick={handleLimpar} 
-              className={`${styles.botao} ${styles.botaoSecundario}`}
-            >
+            <button type="submit" className={styles.botao}>Filtrar</button>
+            <button type="button" onClick={handleLimpar} className={`${styles.botao} ${styles.botaoSecundario}`}>
               Limpar Filtros
             </button>
           </div>
         </form>
 
-        {/* Mensagens de Feedback */}
-        {carregando && <p className={styles.mensagemStatus}>Carregando reservas...</p>}
+        {carregando && <p className={styles.mensagemStatus}>Carregando dados...</p>}
         {erro && <p className={`${styles.mensagemStatus} ${styles.mensagemErro}`}>{erro}</p>}
 
-        {/* Tabela de Resultados */}
         {!carregando && reservas.length === 0 ? (
-          <p className={styles.mensagemStatus}>Nenhuma reserva encontrada para os filtros aplicados.</p>
+          <p className={styles.mensagemStatus}>Nenhum resultado encontrado.</p>
         ) : (
           <div className={styles.tabelaContainer}>
             <table className={styles.tabelaReservas}>
@@ -232,6 +215,7 @@ const ConsultaReservas = () => {
                 <tr>
                   <th>Código</th>
                   <th>Nome do Recurso / Tipo</th>
+                  <th>Localização</th>
                   <th>Usuário</th>
                   <th>Período Data</th>
                   <th>Horário</th>
@@ -239,28 +223,25 @@ const ConsultaReservas = () => {
                 </tr>
               </thead>
               <tbody>
-                {reservas.map((r, index) => (
-                  <tr key={r.id || index}>
-                    <td><strong>{r.codigo_recurso || '-'}</strong></td>
+                {reservas.map((item, index) => (
+                  <tr key={item.reserva_id || item.recurso_id || index}>
+                    <td><strong>{item.codigo_recurso}</strong></td>
                     <td>
-                      {r.recurso_nome || r.codigo_recurso}
-                      {r.ehLaboratorio !== undefined && (
-                        <span style={{ fontSize: '12px', color: '#b7d4df', display: 'block' }}>
-                          {r.ehLaboratorio ? 'Laboratório' : 'Sala'} | Cap: {r.capacidade || '-'}
-                        </span>
-                      )}
-                    </td>
-                    <td>{r.usuario_nome || '-'}</td>
-                    <td>
-                      {r.data_inicio ? `${formatarData(r.data_inicio)} até ${formatarData(r.data_fim)}` : '-'}
-                    </td>
-                    <td>
-                      {r.hora_inicio ? `${r.hora_inicio} às ${r.hora_fim}` : '-'}
-                    </td>
-                    <td>
-                      <span className={getBadgeClass(r.status)}>
-                        {r.status || 'Reservado'}
+                      {item.recurso_nome}
+                      <span style={{ fontSize: '12px', color: '#b7d4df', display: 'block' }}>
+                        {item.ehLaboratorio ? 'Laboratório' : 'Sala'} | Cap: {item.capacidade}
                       </span>
+                    </td>
+                    <td>{item.localizacao}</td>
+                    <td>{item.usuario_nome || '-'}</td>
+                    <td>
+                      {item.data_inicio ? `${formatarData(item.data_inicio)} até ${formatarData(item.data_fim)}` : '-'}
+                    </td>
+                    <td>
+                      {item.hora_inicio ? `${item.hora_inicio} às ${item.hora_fim}` : '-'}
+                    </td>
+                    <td>
+                      <span>{item.status || 'Livre'}</span>
                     </td>
                   </tr>
                 ))}
@@ -274,13 +255,6 @@ const ConsultaReservas = () => {
           Voltar ao Menu Principal
         </Link>
       </main>
-
-      <footer className={styles.rodape}>
-        KrakenLabs <br />
-        &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
-      </footer>
     </div>
   );
-};
-
-export default ConsultaReservas;
+}
