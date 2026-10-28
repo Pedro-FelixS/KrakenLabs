@@ -10,9 +10,7 @@ const salasRoutes = require('./routes/salaRoutes');
 const labsRoutes = require('./routes/labsRoutes');
 const statusRoutes = require('./routes/statusRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
-
-// Importação do Controller de Consultas de Reservas
-const ConsultaController = require('./controllers/consultaController');
+const consultaRoutes = require('./routes/consultaRoutes');
 
 routes.post('/login', async (req, res) => {
   const { email, senha } = req.body;
@@ -39,7 +37,6 @@ routes.post('/login', async (req, res) => {
       return res.status(401).send('Senha incorreta, tente novamente!');
     }
 
-    // Retorna os dados essenciais do usuário e seu perfil ('Aluno' ou 'Professor')
     return res.status(200).json({
       mensagem: "O login foi realizado com sucesso!",
       usuario: {
@@ -57,7 +54,7 @@ routes.post('/login', async (req, res) => {
 });
 
 // Nova Rota para Consulta de Reservas com Filtros
-routes.get('/consultar', ConsultaController.buscar);
+routes.get('/consultaReserva', consultaRoutes);
 
 routes.use(professorRoutes);
 routes.use(alunoRoutes);
