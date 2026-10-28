@@ -35,9 +35,9 @@ export default function ConsultaReservas() {
 
     // Utiliza o mesmo padrão de Fallback de URLs da tela de Cadastro
     const urlsParaTestar = [
-      `http://localhost:5000/consultar${queryString}`,
-      `http://localhost:5000/api/reservas/consultar${queryString}`,
-      `http://localhost:5000/reservas/consultar${queryString}`
+      `http://localhost:5000/api/consultar`,
+      `http://localhost:5000/api/reservas/consultar`,
+      `http://localhost:5000/reservas/consultar`
     ];
 
     let dados = null;
