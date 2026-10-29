@@ -16,19 +16,9 @@ const ESTADO_INICIAL = {
 
 export default function Home() {
   const router = useRouter();
-  const [mensagem, setMensagem] = useState('Carregando...');
   const [formData, setFormData] = useState(ESTADO_INICIAL);
   const [statusEnvio, setStatusEnvio] = useState(null);
   const [carregando, setCarregando] = useState(false);
-
-  useEffect(() => {
-
-    fetch('http://localhost:5000/api/dados')
-      .then((res) => res.json())
-      .then((data) => setMensagem(data.mensagem))
-      .catch(() => setMensagem('Erro de conexão'));
-
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +41,7 @@ export default function Home() {
 
     try {
 
-      const res = await fetch('http://localhost:5000/api/usuarios', {
+      const res = await fetch('http://localhost:5000/alunos/criar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
