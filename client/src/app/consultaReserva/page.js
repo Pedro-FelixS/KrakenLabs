@@ -20,47 +20,42 @@ export default function ConsultaReservas() {
     status: ''
   });
 
-  const buscarReservas = async () => {
-    setCarregando(true);
-    setErro('');
+  const buscarReservas = async (filtrosBusca = filtros) => {
+setCarregando(true);
+setErro('');
 
-    const params = new URLSearchParams();
-    Object.keys(filtros).forEach((key) => {
-      if (filtros[key] && filtros[key].trim() !== '') {
-        params.append(key, filtros[key].trim());
-      }
-    });
+try {
+const params = new URLSearchParams();
 
-    const queryString = params.toString() ? `?${params.toString()}` : '';
+Object.entries(filtrosBusca).forEach(([key, value]) => {
+  if (value && value.trim() !== '') {
+    params.append(key, value.trim());
+  }
+});
 
-    // Utiliza o mesmo padrão de Fallback de URLs da tela de Cadastro
-    const urlsParaTestar = [
-      `http://localhost:5000/api/consultar`,
-      `http://localhost:5000/api/reservas/consultar`,
-      `http://localhost:5000/reservas/consultar`
-    ];
+const queryString = params.toString();
+const url = `http://localhost:5000/consultaReserva${
+  queryString ? `?${queryString}` : ''
+}`;
 
-    let dados = null;
+const res = await fetch(url);
 
-    for (const url of urlsParaTestar) {
-      try {
-        const res = await fetch(url);
-        if (res.ok) {
-          dados = await res.json();
-          break;
-        }
-      } catch (e) {}
-    }
+if (!res.ok) {
+  throw new Error(`Erro HTTP ${res.status}`);
+}
 
-    if (dados) {
-      const lista = Array.isArray(dados) ? dados : (dados.recordset || []);
-      setReservas(lista);
-    } else {
-      setErro('Não foi possível conectar com o servidor backend.');
-    }
+const dados = await res.json();
 
-    setCarregando(false);
-  };
+setReservas(Array.isArray(dados) ? dados : []);
+
+} catch (erro) {
+console.error('Erro ao consultar recursos:', erro);
+setErro('Não foi possível consultar os recursos. Verifique se o backend está funcionando.');
+setReservas([]);
+} finally {
+setCarregando(false);
+}
+};
 
   useEffect(() => {
     setMontado(true);
@@ -77,17 +72,19 @@ export default function ConsultaReservas() {
   };
 
   const handleLimpar = () => {
-    setFiltros({
-      codigoRecurso: '',
-      nomeRecurso: '',
-      dataInicio: '',
-      dataFim: '',
-      hora: '',
-      usuario: '',
-      status: ''
-    });
-    setTimeout(() => buscarReservas(), 50);
+  const filtrosVazios = {
+    codigoRecurso: '',
+    nomeRecurso: '',
+    dataInicio: '',
+    dataFim: '',
+    hora: '',
+    usuario: '',
+    status: ''
   };
+
+  setFiltros(filtrosVazios);
+  buscarReservas(filtrosVazios);
+};
 
   const formatarData = (dataStr) => {
     if (!dataStr) return '-';
