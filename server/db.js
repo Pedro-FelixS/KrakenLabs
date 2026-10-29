@@ -52,4 +52,6 @@ const db = {
   }
 };
 
+db.conectarBancoDeDados = obterPool;
+
 module.exports = db;

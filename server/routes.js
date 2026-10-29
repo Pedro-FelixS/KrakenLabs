@@ -54,7 +54,7 @@ routes.post('/login', async (req, res) => {
 });
 
 // Nova Rota para Consulta de Reservas com Filtros
-routes.get('/consultaReserva', consultaRoutes);
+routes.use(consultaRoutes);
 
 routes.use(professorRoutes);
 routes.use(alunoRoutes);
