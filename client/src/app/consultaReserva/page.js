@@ -221,7 +221,7 @@ setCarregando(false);
               </thead>
               <tbody>
                 {reservas.map((item, index) => (
-                  <tr key={item.reserva_id || item.recurso_id || index}>
+                  <tr key={`${item.recurso_id}-${item.reserva_id ?? index}`}>
                     <td><strong>{item.codigo_recurso}</strong></td>
                     <td>
                       {item.recurso_nome}
