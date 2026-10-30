@@ -29,6 +29,11 @@ class ReservaController {
     if (!codigo_recurso || !usuario_nome || !data_inicio || !data_fim || !hora_inicio || !hora_fim) {
       return res.status(400).send('Todos os campos são obrigatórios.');
     }
+    if (data_fim < data_inicio) {
+    return res.status(400).send(
+        'A data final não pode ser anterior à data inicial.'
+    );
+}
 
     reservaModel.verificarDisponibilidade(codigo_recurso, data_inicio, data_fim, hora_inicio, hora_fim)
       .then((conflitos) => {

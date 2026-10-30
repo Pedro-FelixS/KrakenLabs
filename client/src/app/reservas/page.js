@@ -95,6 +95,13 @@ export default function PaginaReservas() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensagem({ tipo: '', texto: '' });
+    if (form.data_fim < form.data_inicio) {
+      setMensagem({
+        tipo: 'erro',
+        texto: 'A data final não pode ser anterior à data inicial.'
+      });
+      return;
+    }
     setCarregando(true);
 
     try {
