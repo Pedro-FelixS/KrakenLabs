@@ -11,7 +11,7 @@ class AlunoController {
       return res.status(400).send('CPF, nome, e-mail e senha são obrigatórios.');
     }
 
-      try {
+  try {
     const senhaHash = await bcrypt.hash(senha, 10);
 
     await alunoModel.criarUsuario({
@@ -22,6 +22,7 @@ class AlunoController {
         dataNascimento,
         telefone
       });
+
          return res.status(201).send('Aluno cadastrado com sucesso!');
   } catch (erro) {
     console.error('Erro ao cadastrar aluno:', erro);

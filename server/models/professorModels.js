@@ -11,13 +11,13 @@ class ProfessorModels {
       const dataNiverVal = dataNascimento ? "'" + dataNascimento + "'" : "NULL";
       const celVal = telefone ? "'" + telefone + "'" : "NULL";
 
-      let sql = "INSERT INTO usuarios (cpf, nome, dataniver, cel, email, senha) VALUES (";
+      let sql = "INSERT INTO usuarios (cpf, nome, dataniver, cel, email, senha, ehProfessor) VALUES (";
       sql += "'" + cpf + "', ";
       sql += "'" + nome + "', ";
       sql += dataNiverVal + ", ";
       sql += celVal + ", ";
       sql += "'" + email + "', ";
-      sql += "'" + senhaHash + "')";
+      sql += "'" + senhaHash + "', ";
       sql += "1)";
 
       console.log("Comando INSERT de Professor montado = " + sql);
