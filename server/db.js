@@ -52,6 +52,8 @@ const db = {
   }
 };
 
+db.sql = sql;
+
 db.conectarBancoDeDados = obterPool;
 
 module.exports = db;

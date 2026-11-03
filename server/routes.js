@@ -23,7 +23,7 @@ routes.post('/login', async (req, res) => {
     const puxar = await conectarBancoDeDados();
     const resultado = await puxar.request()
       .input('email', sql.VarChar, email)
-      .query("SELECT cpf, nome, email, senha, ISNULL(tipo, 'Aluno') as tipo FROM usuarios WHERE email = @email");
+      .query("SELECT cpf, nome, email, senha, ehProfessor FROM usuarios WHERE email = @email");
 
     const usuarios = resultado.recordset;
     if (usuarios.length === 0) {
@@ -43,7 +43,7 @@ routes.post('/login', async (req, res) => {
         cpf: usuarioCorreto.cpf,
         nome: usuarioCorreto.nome,
         email: usuarioCorreto.email,
-        tipo: usuarioCorreto.tipo
+        ehProfessor: usuarioCorreto.ehProfessor
       }
     });
 
