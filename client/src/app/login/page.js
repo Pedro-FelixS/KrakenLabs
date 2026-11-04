@@ -87,14 +87,6 @@ export default function LoginPage() {
           </Link>
 
           <br /><br />
-
-          <button
-            className={styles.botao}
-            type="button"
-            onClick={() => router.push('/paginaPrincipal')}
-          >
-            Testar Página Principal
-          </button>
         </div>
       </div>
 
