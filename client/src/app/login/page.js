@@ -11,34 +11,39 @@ export default function LoginPage() {
   const [statusEnvio, setStatusEnvio] = useState(null);
   const [carregando, setCarregando] = useState(false);
 
-  const Login = async (e) => { 
-    e.preventDefault();
-    setCarregando(true);
-    setStatusEnvio(null);
+ const Login = async (e) => {
+  e.preventDefault();
+  setCarregando(true);
+  setStatusEnvio(null);
 
-    try {
-      const data = new FormData(e.target); 
+  try {
+    const data = new FormData(e.target);
 
-      const resultado = await fetch('http://localhost:5000/login', { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(data)),
-      });
+    const resultado = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(data)),
+    });
 
+    if (!resultado.ok) {
       const mensagem = await resultado.text();
-
-      if (!resultado.ok) {
-        alert(mensagem);
-        return;
-      }
-
-      router.push('/paginaPrincipal');
-    } catch (erro) {
-      alert('Falha ao conectar com o servidor. Tente novamente mais tarde.');
-    } finally {
-      setCarregando(false);
+      alert(mensagem);
+      return;
     }
-  };
+
+    const dados = await resultado.json();
+
+    // Guarda os dados do usuário na sessão
+    sessionStorage.setItem('usuario', JSON.stringify(dados.usuario));
+
+    router.push('/paginaPrincipal');
+
+  } catch (erro) {
+    alert('Falha ao conectar com o servidor. Tente novamente mais tarde.');
+  } finally {
+    setCarregando(false);
+  }
+};
 
   return (
     <div className={styles.page}>
