@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './status.module.css';
+import Link from 'next/link';
 
 export default function StatusPage() {
   const [recursos, setRecursos] = useState([]);
@@ -135,6 +136,14 @@ export default function StatusPage() {
     </button>
        </form>
         </div>
+        <br/>
+        <br/>
+          <Link
+              href="/paginaPrincipal"
+              className={styles.botao}
+          >
+            Voltar
+          </Link>
         </div>
         <span className={styles.rodape}>
             KrakenLabs <br />

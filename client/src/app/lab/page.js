@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from './lab.module.css'
 const ESTADO_INICIAL = {
   nome: '',
@@ -126,12 +127,19 @@ export default function lab() {
             disabled={carregando}>
                 {carregando ? 'Cadastrando...' : 'Cadastrar Laboratório'}
             </button>
-
-            </form>
-            </div>
+          </form>
+          <br/>
+          <br/>
+          <Link
+              href="/paginaPrincipal"
+              className={styles.botao}
+          >
+            Voltar
+          </Link>
+          </div>
         </div>
         <span className={styles.rodape}>
-        KrakenLabs <br />
+        KrakenLabs <br/>
         &copy; Feito pelos REAIS devs Seniors P. Felix e H. Pompei
       </span>
     </div>

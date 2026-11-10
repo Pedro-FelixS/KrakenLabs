@@ -289,32 +289,9 @@ export default function PaginaReservas() {
             {carregando ? 'Cadastrando...' : 'Cadastrar Reserva'}
           </button>
         </form>
-
-        <h2 className={styles.subtitulo}>Reservas Existentes</h2>
-        {reservas.length === 0 ? (
-          <p style={{ color: '#b7d4df' }}>Nenhuma reserva encontrada no momento.</p>
-        ) : (
-          <ul className={styles.listaReservas}>
-            {reservas.map((r) => (
-              <li key={r.id} className={styles.reservaItem}>
-                <div className={styles.reservaInfo}>
-                  <strong>Recurso: {r.codigo_recurso}</strong> — Por <b>{r.usuario_nome}</b>
-                  <br />
-                  <small>
-                    Período: {r.data_inicio} até {r.data_fim} | Horário: {r.hora_inicio} às {r.hora_fim}
-                  </small>
-                </div>
-                <span className={getBadgeClass(r.status)}>
-                  {r.status}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <br />
+        <br/>
         <Link href="/paginaPrincipal" className={styles.botao}>
-          Voltar ao Menu Principal
+          Voltar
         </Link>
       </div>
 

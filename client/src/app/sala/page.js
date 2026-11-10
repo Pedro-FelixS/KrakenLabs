@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from './sala.module.css';
 const ESTADO_INICIAL = {
   nome: '',
@@ -135,6 +136,13 @@ export default function sala() {
 
             </form>
             </div>
+            <br></br>
+          <Link
+              href="/paginaPrincipal"
+              className={styles.botao}
+          >
+            Voltar
+          </Link>
         </div>
           <span className={styles.rodape}>
             KrakenLabs <br/>

@@ -64,6 +64,14 @@ export default function PaginaPrincipal() {
         <Link href="/consultaReserva" className={styles.botao}>
           Consultar as reservas
         </Link>
+        <br/>
+        <br/>
+        <Link
+            href="/login"
+            className={styles.botao}
+          >
+            Voltar
+          </Link>
         </div>
         <span className={styles.rodape}>
         KrakenLabs <br />

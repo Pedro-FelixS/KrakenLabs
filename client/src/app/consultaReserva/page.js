@@ -249,7 +249,7 @@ setCarregando(false);
 
         <br />
         <Link href="/paginaPrincipal" className={styles.botao}>
-          Voltar ao Menu Principal
+          Voltar
         </Link>
       </main>
     </div>
